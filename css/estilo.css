@@ -1,0 +1,265 @@
+/* ======= PALETA ======= 
+Azul escuro: #5B8FB9
+Azul claro:  #A7C7E7
+Branco gelo: #F8F9FA
+Cinza claro: #E9ECEF
+Verde claro: #CDE8D5
+========================= */
+
+body {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  background-color: #F8F9FA;
+  color: #333;
+}
+
+/* ===== CABEÇALHO ===== */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #F8F9FA;
+  padding: 10px 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: transform 0.3s ease;
+}
+
+.logo:hover {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transform: scale(1.1);
+}
+
+.logo img {
+    height: 60px;
+    width: auto;
+}
+
+.titulo-site {
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+.titulo-site:hover {
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+.mundo {
+  color: #5B8FB9;
+}
+.tea {
+  color: #98c79f;
+}
+
+/* ===== CONTEÚDO PRINCIPAL ===== */
+.container {
+  padding: 15px;
+  text-align: center;
+}
+
+/* ===== BOAS-VINDAS ===== */
+.boas-vindas {
+  background-color: #badef4;
+  padding: 20px;
+  border-radius: 16px;
+  margin-bottom: 25px;
+}
+
+/* Imagem aumenta em telas grandes */
+.boas-vindas-img {
+  width: 60%;
+  max-width: 300px;
+  border-radius: 12px;
+  transition: width 0.3s ease;
+}
+
+@media (min-width: 992px) {
+  .boas-vindas-img {
+    width: 70%;
+    max-width: 450px;
+  }
+}
+
+/* ===== MENU PRINCIPAL ===== */
+.menu-principal {
+  margin: 0 25px;
+}
+
+@media (min-width: 992px) {
+  .menu-principal {
+    margin: 0 25px;
+  }
+}
+
+.grid-menu {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, auto);
+  gap: 15px;
+}
+
+@media (min-width: 992px) {
+  .grid-menu {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ===== BOTÕES ===== */
+.btn {
+  border: none;
+  color: white;
+  font-size: 1rem;
+  padding: 15px;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.btn:hover {
+  transform: scale(1.05);
+}
+
+/* Aumentar botões em telas grandes */
+@media (min-width: 992px) {
+  .btn {
+    font-size: 1.2rem; 
+    padding: 20px;
+  }
+}
+
+/* ===== CORES DOS BOTÕES ===== */
+.azul-escuro { background-color: #5B8FB9; }
+.azul-claro  { background-color: #A7C7E7; }
+.verde       { background-color: #CDE8D5; }
+.laranja     { background-color: #f6a986; }
+.verde-medio { background-color: #98c79f; }
+.verde-claro { background-color: #b8e1c0; }
+
+/* ===== DICA DO DIA ===== */
+.dica-dia {
+  margin-top: 25px;
+  background-color: #E9ECEF;
+  padding: 10px;
+  border-radius: 10px;
+  font-weight: 500;
+}
+
+/* ===== RODAPÉ ===== */
+.footer {
+  background-color: #F8F9FA;
+  padding: 10px 0;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  border-top: 1px solid #E9ECEF;
+}
+
+.footer nav {
+  display: flex;
+  justify-content: space-around;
+}
+
+.footer a {
+  text-decoration: none;
+  color: #5B8FB9;
+  font-weight: 500;
+}
+
+.footer a.ativo {
+  color: #2b2b2b;
+  font-weight: 700;
+}
+
+/* ===== LOGIN ===== */
+.login-body {
+  background-color: #E9ECEF;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.login-container {
+  background-color: #F8F9FA;
+  padding: 35px;
+  border-radius: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.login-form input {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border: 1px solid #E9ECEF;
+  border-radius: 10px;
+  font-size: 1rem;
+}
+
+.login-form .btn {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.link {
+  display: block;
+  margin-top: 10px;
+  color: #5B8FB9;
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+#login-logo {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#login-logo h1 {
+  font-size: 1.8rem;
+  margin: 10px 0 0 0;
+}
+
+#login-logo .mundo {
+  color: #5B8FB9;
+}
+
+#login-logo .tea {
+  color: #98c79f;
+}
+
+.login-logo-img {
+  width: 80px; 
+  display: block;
+  margin: 0 auto;
+}
+
+.login-extra {
+  margin-top: 15px;
+  font-size: 0.95rem;
+}
+
+.login-extra p {
+  margin: 5px 0;
+}
+
+.login-extra .link {
+  color: #5B8FB9;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.login-extra .link:hover {
+  text-decoration: underline;
+}
