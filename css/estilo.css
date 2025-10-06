@@ -305,9 +305,9 @@ body {
 }
 
 .login-form input {
-  width: 100%; /* reduz a largura para dar espaço nas laterais */
+  width: 100%; 
   padding: 12px;
-  margin: 8px auto; /* centraliza horizontalmente */
+  margin: 8px auto;
   border: 1px solid #ced4da;
   border-radius: 10px;
   font-size: 1rem;
@@ -365,7 +365,7 @@ body {
   }
 
   .login-side {
-    display: none; /* esconde a imagem */
+    display: none; 
   }
 
   .login-box {
