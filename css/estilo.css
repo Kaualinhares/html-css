@@ -59,6 +59,79 @@ body {
   color: #98c79f;
 }
 
+.user-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.btn-link {
+  background-color: #CDE8D5;
+  color: #2b3d3b;
+  text-decoration: none;
+  padding: 8px 18px;
+  border-radius: 12px;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.btn-link:hover {
+  background-color: #98c79f;
+}
+
+/* ===== ÍCONE DE PERFIL ===== */
+.profile-icon {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid #A7C7E7;
+  transition: transform 0.3s;
+}
+
+.profile-icon:hover {
+  transform: scale(1.1);
+}
+
+.profile-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ===== RESPONSIVIDADE ===== */
+@media (max-width: 768px) {
+  .btn-link {
+    padding: 6px 12px;
+    font-size: 14px;
+  }
+
+  .profile-icon {
+    width: 35px;
+    height: 35px;
+  }
+
+  .user-actions {
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .btn-link {
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+
+  .profile-icon {
+    width: 30px;
+    height: 30px;
+  }
+
+  .user-actions {
+    gap: 8px;
+  }
+}
+
 /* ===== CONTEÚDO PRINCIPAL ===== */
 .container {
   padding: 15px;
@@ -149,32 +222,6 @@ body {
   padding: 10px;
   border-radius: 10px;
   font-weight: 500;
-}
-
-/* ===== RODAPÉ ===== */
-.footer {
-  background-color: #F8F9FA;
-  padding: 10px 0;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  border-top: 1px solid #E9ECEF;
-}
-
-.footer nav {
-  display: flex;
-  justify-content: space-around;
-}
-
-.footer a {
-  text-decoration: none;
-  color: #5B8FB9;
-  font-weight: 500;
-}
-
-.footer a.ativo {
-  color: #2b2b2b;
-  font-weight: 700;
 }
 
 /* ===== LOGIN ===== */
