@@ -1,0 +1,178 @@
+/* ===== LOGIN PAGE - estilo isolado ===== */
+
+.login-page {
+  background-color: #E9ECEF;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+}
+
+.login-wrapper {
+  display: flex;
+  width: 90%;
+  max-width: 1000px;
+  background-color: #fff;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+
+/* Lado esquerdo */
+.login-side {
+  flex: 1;
+  background-color: #0E4D64;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+}
+
+.login-side img {
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Lado direito */
+.login-box {
+  flex: 1;
+  background-color: #F8F9FA;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  text-align: center;
+}
+
+/* Logo e título */
+.login-header {
+  margin-bottom: 25px;
+}
+
+.login-logo {
+  width: 80px;
+  margin-bottom: 5px;
+}
+
+.login-header h1 {
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+.mundo {
+  color: #0E4D64;
+  font-weight: 600;
+}
+
+.tea {
+  color: #6FC3C0;
+  font-weight: 600;
+}
+
+/* Formulário */
+.login-form {
+  width: 100%;
+  max-width: 320px;
+}
+
+.login-form input {
+  width: 100%; 
+  padding: 12px;
+  margin: 8px auto;
+  border: 1px solid #ced4da;
+  border-radius: 10px;
+  font-size: 1rem;
+  box-sizing: border-box;
+  outline: none;
+  transition: all 0.3s ease;
+  background-color: #fff;
+}
+
+.login-form input:focus {
+  border-color: #5B8FB9;
+  box-shadow: 0 0 4px rgba(91, 143, 185, 0.4);
+}
+
+.login-btn {
+  width: 100%;
+  background-color: #0E4D64;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  margin-top: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.login-btn:hover {
+  background-color: #097A9C;
+}
+
+.login-link {
+  display: block;
+  margin-top: 10px;
+  color: #0E4D64;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.login-link:hover {
+  text-decoration: underline;
+}
+
+/* Rodapé */
+.login-footer {
+  margin-top: 15px;
+  font-size: 0.95rem;
+}
+
+/* ===== RESPONSIVIDADE ===== */
+@media (max-width: 768px) {
+  .login-wrapper {
+    flex-direction: column;
+  }
+
+  .login-side {
+    display: none; 
+  }
+
+  .login-box {
+    width: 100%;
+    padding: 30px 20px;
+  }
+
+  .login-form {
+    max-width: 90%;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-container {
+    max-width: 90%;
+    padding: 25px 20px;
+  }
+
+  .login-logo-img {
+    width: 70px;
+  }
+
+  #login-logo h1 {
+    font-size: 1.6rem;
+  }
+
+  .login-form input {
+    font-size: 0.95rem;
+    padding: 10px;
+  }
+
+  .btn {
+    padding: 10px;
+    font-size: 0.95rem;
+  }
+}
