@@ -10,18 +10,18 @@
 <body>
 
     <header class="header">
-    <div class="logo">
-        <img src="imagens/logo_mundotea.png" alt="Logo MundoTEA">
-        <h1 class="titulo-site"><span class="mundo">Mundo</span><span class="tea">TEA</span></h1>
-    </div>
+      <div class="logo">
+          <img src="imagens/logo_mundotea.png" alt="Logo MundoTEA">
+          <h1 class="titulo-site"><span class="mundo">Mundo</span><span class="tea">TEA</span></h1>
+      </div>
 
-    <div class="user-actions">
-      <a href="login.html" class="btn-link">Login</a>
-      <a href="cadastro.html" class="btn-link">Cadastrar-se</a>
-      <a href="perfil.html" class="profile-icon">
-          <img src="imagens/iconegenerico.png" alt="Perfil Usuário">
-      </a>
-  </div>
+      <div class="user-actions">
+        <a href="login.html" class="btn-link">Login</a>
+        <a href="cadastro.html" class="btn-link">Cadastrar-se</a>
+        <a href="perfil.html" class="profile-icon">
+            <img src="imagens/iconegenerico.png" alt="Perfil Usuário">
+        </a>
+      </div>
     </header>
 
     <main class="container">
@@ -31,7 +31,7 @@
 
       <section class="menu-principal">
         <div class="grid-menu">
-          <button class="btn azul-escuro">🎲 Jogos Lúdicos</button>
+          <button class="btn azul-escuro" onclick="abrirJogos()">🎲 Jogos Lúdicos</button>
           <button class="btn azul-claro">📖 Histórias Interativas</button>
           <button class="btn verde">🎨 Criar & Colorir</button>
           <button class="btn laranja">🧩 Quebra-Cabeças</button>
@@ -44,5 +44,12 @@
         <p>📚 Hoje é dia de ler história!</p>
       </section>
     </main>
+
+<script>
+    function abrirJogos() {
+      window.location.href = "jogos-ludicos.html"; // leva para a página de jogos
+    }
+  </script>
+
 </body>
 </html>
