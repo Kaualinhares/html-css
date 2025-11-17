@@ -1,0 +1,247 @@
+/* ============================  
+        PALETA MUNDO TEA  
+Azul escuro: #5B8FB9
+Azul claro:  #A7C7E7
+Branco gelo: #F8F9FA
+Cinza claro: #E9ECEF
+Verde claro: #CDE8D5
+============================= */
+
+:root {
+    --azul-escuro: #5B8FB9;
+    --azul-claro: #A7C7E7;
+    --verde-claro: #CDE8D5;
+    --cinza-claro: #E9ECEF;
+    --branco-gelo: #F8F9FA;
+    --texto: #2b3d3b;
+}
+
+/* ===== GERAL ===== */
+body {
+    margin: 0;
+    background: var(--branco-gelo);
+    font-family: "Poppins", sans-serif;
+    color: var(--texto);
+}
+
+/* ===== CABEÇALHO ===== */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #F8F9FA;
+  padding: 10px 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: transform 0.3s ease;
+}
+
+.logo:hover {
+  transform: scale(1.1);
+}
+
+.logo img {
+    height: 60px;
+}
+
+.titulo-site {
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+.mundo { color: var(--azul-escuro); }
+.tea   { color: #98c79f; }
+
+.user-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.btn-link {
+  background-color: var(--verde-claro);
+  color: var(--texto);
+  text-decoration: none;
+  padding: 8px 18px;
+  border-radius: 12px;
+  font-weight: 600;
+  transition: 0.3s ease;
+}
+
+.btn-link:hover {
+  background-color: #98c79f;
+}
+
+/* ===== ÍCONE DE PERFIL ===== */
+.profile-icon {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid var(--azul-claro);
+  transition: transform 0.3s;
+}
+
+.profile-icon:hover { transform: scale(1.1); }
+
+.profile-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ============================
+      CONTEÚDO PRINCIPAL
+============================ */
+.conteudo-principal {
+    width: 90%;
+    margin: 35px auto;
+}
+
+.titulo {
+    text-align: center;
+    font-size: 2rem;
+    color: var(--azul-escuro);
+    font-weight: 700;
+}
+
+/* ===== QUADRO PRINCIPAL ===== */
+.quadro-principal {
+    background: #fff;
+    padding: 35px;
+    width: 90%;
+    margin: 25px auto;
+    border-radius: 20px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+}
+
+.titulo-quadro {
+    background: var(--azul-claro);
+    color: var(--azul-escuro);
+    font-size: 1.4rem;
+    padding: 14px;
+    border-radius: 16px;
+    font-weight: 700;
+    text-align: center;
+}
+
+/* ============================
+            GRID
+============================ */
+.grid-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    margin-top: 30px;
+}
+
+.card {
+    background: #F8F9FA;
+    border-radius: 18px;
+    padding: 20px;
+    text-align: center;
+    border: 2px solid var(--azul-claro);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+.card img {
+    width: 110px;
+    border-radius: 10px;
+}
+
+.card h3 {
+    margin: 10px 0 5px;
+    color: var(--azul-escuro);
+    font-size: 1.2rem;
+}
+
+.card p {
+    font-size: 0.95rem;
+    color: #555;
+}
+
+.btn-montar {
+    margin-top: 12px;
+    width: 100%;
+    padding: 12px;
+    background: var(--azul-claro);
+    color: var(--texto);
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-montar:hover {
+    background: #8fb8d5;
+    transform: scale(1.05);
+}
+
+.destaque {
+    border-width: 3px;
+}
+
+/* ============================
+         BOTÃO VOLTAR
+   (mantido como pediu)
+============================ */
+.area-voltar {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.btn-voltar {
+    display: inline-block;
+    background-color: #CDE8D5;
+    color: #2b3d3b;
+    padding: 12px 28px;
+    border-radius: 14px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: 0.25s ease;
+}
+
+.btn-voltar:hover {
+    background-color: #98c79f;
+    transform: scale(1.06);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+}
+
+/* ============================
+       RESPONSIVIDADE
+============================ */
+@media (max-width: 900px) {
+  .grid-cards {
+      grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .grid-cards {
+      grid-template-columns: 1fr;
+  }
+
+  .quadro-principal {
+      padding: 25px;
+      width: 95%;
+  }
+
+  .btn-voltar {
+      width: 80%;
+  }
+}

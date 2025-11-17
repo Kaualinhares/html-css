@@ -33,10 +33,10 @@
         <div class="grid-menu">
           <button class="btn azul-escuro" onclick="abrirJogos()">🎲 Jogos Lúdicos</button>
           <button class="btn azul-claro" onclick="abrirHistoria()">📖 Histórias Interativas</button>
-          <button class="btn verde">🎨 Criar & Colorir</button>
-          <button class="btn laranja">🧩 Quebra-Cabeças</button>
+          <button class="btn verde" onclick="abriColorir()">🎨 Colorir</button>
+          <button class="btn laranja" onclick="abriQuebraCabeca()">🧩 Quebra-Cabeças</button>
           <button class="btn verde-medio">💚 Atividades Terapêuticas</button>
-          <button class="btn verde-claro">📅 Calendário de Recomendações</button>
+          <button class="btn verde-claro" onclick="abriCalendario()">📅 Calendário de Recomendações</button>
         </div>
       </section>
 
@@ -51,6 +51,15 @@
     }
     function abrirHistoria() {
       window.location.href = "historias-interativas.html"; // leva para a página de jogos
+    }
+    function abriColorir() {
+      window.location.href = "colorir.html"; // leva para a página de jogos
+    }
+    function abriQuebraCabeca() {
+      window.location.href = "quebra-cabeca.html"; // leva para a página de jogos
+    }
+    function abriCalendario() {
+      window.location.href = "calendario.html"; // leva para a página de jogos
     }
   </script>
   

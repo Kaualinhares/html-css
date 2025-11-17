@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MundoTEA - Criar & Colorir</title>
+    <link rel="icon" type="image/png" href="imagens/logo_mundotea.png">
+    <link rel="stylesheet" href="css/estilo-colorir.css">
+</head>
+<body>
+
+    <!-- ======= CABEÇALHO ======= -->
+  <header class="header">
+    <div class="logo">
+        <img src="imagens/logo_mundotea.png" alt="Logo MundoTEA">
+        <h1 class="titulo-site"><span class="mundo">Mundo</span><span class="tea">TEA</span></h1>
+    </div>
+
+    <div class="user-actions">
+      <a href="perfil.html" class="profile-icon">
+          <img src="imagens/iconegenerico.png" alt="Perfil Usuário">
+      </a>
+    </div>
+  </header>
+
+    <main class="colorir-container">
+
+        <!-- TÍTULO -->
+        <section class="titulo-area">
+            <h1>🎨 Criar & Colorir</h1>
+        </section>
+
+        <div class="conteudo">
+
+            <!-- ===== LISTA DE DESENHOS ===== -->
+            <aside class="desenhos-lista">
+                <div class="desenho-item">
+                    <img src="imagens/desenho1.png" alt="">
+                    <button class="btn-escolher">Escolher</button>
+                </div>
+
+                <div class="desenho-item">
+                    <img src="imagens/desenho2.png" alt="">
+                    <button class="btn-escolher">Escolher</button>
+                </div>
+
+                <div class="desenho-item">
+                    <img src="imagens/desenho3.png" alt="">
+                    <button class="btn-escolher">Escolher</button>
+                </div>
+
+                <div class="desenho-item">
+                    <img src="imagens/desenho4.png" alt="">
+                    <button class="btn-escolher">Escolher</button>
+                </div>
+            </aside>
+
+            <!-- ===== ÁREA DE DESENHO ===== -->
+            <section class="area-desenho">
+                <img src="imagens/desenho-base.png" class="desenho-display" alt="Desenho para colorir">
+                <button class="btn-voltar" onclick="voltaraoMenu()">Voltar ao Menu</button>
+            </section>
+
+            <!-- ===== FERRAMENTAS ===== -->
+            <aside class="ferramentas">
+
+                <div class="icones">
+                    <div><img src="imagens/pincel.png" alt=""> Pincel</div>
+                    <div><img src="imagens/lapis.png" alt=""> Lápis</div>
+                    <div><img src="imagens/preencher.png" alt=""> Preencher</div>
+                    <div><img src="imagens/gota.png" alt=""> Tinta</div>
+                    <div><img src="imagens/borracha.png" alt=""> Borracha</div>
+                    <div><img src="imagens/lixeira.png" alt=""> Apagar</div>
+                </div>
+
+                <!-- PALETA DE CORES -->
+                <div class="paleta">
+                    <span class="cor" style="background:#ff0000"></span>
+                    <span class="cor" style="background:#ff8000"></span>
+                    <span class="cor" style="background:#ffff00"></span>
+                    <span class="cor" style="background:#00cc00"></span>
+                    <span class="cor" style="background:#0066ff"></span>
+                    <span class="cor" style="background:#8000ff"></span>
+                    <span class="cor" style="background:#ff00ff"></span>
+                    <span class="cor" style="background:#000000"></span>
+                    <span class="cor" style="background:#ffffff; border:1px solid #ccc"></span>
+                </div>
+
+                <button class="btn-acao azul">Desfazer</button>
+                <button class="btn-acao verde">Salvar</button>
+            </aside>
+
+        </div>
+
+    </main>
+    <script>
+        function voltaraoMenu() {
+        window.location.href = "index.html"; // leva para a página de jogos
+        }
+    </script>
+</body>
+</html>
