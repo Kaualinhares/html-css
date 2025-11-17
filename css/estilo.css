@@ -339,6 +339,7 @@ body {
   transform: scale(1.05);
 }
 
+
 /* ===== RESPONSIVIDADE ===== */
 @media (max-width: 992px) {
   .jogos-container {
@@ -380,4 +381,689 @@ body {
     width: 80%;
     display: inline-block;
   }
+}
+
+/* =========================================
+   ESTILOS EXCLUSIVOS – HISTÓRIAS INTERATIVAS  
+   (AGORA MANTENDO AS CORES AZUIS ORIGINAIS)
+   ========================================= */
+
+.historias-container {
+  background-color: #ffffff;
+  border-radius: 20px;
+  padding: 40px;
+  width: 95%;
+  max-width: 1100px;
+  margin: 40px auto;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.historias-header {
+  background-color: #A7C7E7; /* azul claro */
+  border-radius: 18px;
+  padding: 20px 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.historias-header h1 {
+  margin: 0;
+  color: #2b3d3b;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.icone-historias {
+  width: 45px;
+  height: 45px;
+}
+
+/* GRID */
+.historias-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  margin-top: 35px;
+}
+
+/* CARD */
+.historia-card {
+  background-color: #F8F9FA;
+  border-radius: 18px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+  padding: 25px 20px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.historia-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+.historia-icone {
+  width: 90px;
+  margin-bottom: 15px;
+}
+
+.historia-card h2 {
+  font-size: 1.4rem;
+  margin-bottom: 8px;
+  color: #2b3d3b;
+}
+
+.historia-card p {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 20px;
+  line-height: 1.4;
+}
+
+/* BOTÃO */
+.btn-ler {
+  background-color: #5B8FB9; /* azul escuro */
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 1rem;
+}
+
+.btn-ler:hover {
+  background-color: #4a7ca3; /* azul escuro mais forte */
+  transform: scale(1.05);
+}
+
+/* RESPONSIVIDADE */
+@media (max-width: 992px) {
+  .historias-container {
+    padding: 30px 20px;
+  }
+
+  .historias-header h1 {
+    font-size: 1.8rem;
+  }
+
+  .historia-icone {
+    width: 80px;
+  }
+
+  .btn-ler {
+    padding: 10px 20px;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .historias-header {
+    flex-direction: column;
+  }
+
+  .historias-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .historia-card {
+    padding: 20px;
+  }
+
+  .historia-icone {
+    width: 70px;
+  }
+
+  .btn-ler {
+    width: 80%;
+    display: inline-block;
+  }
+}
+
+/* =====================================================
+   PÁGINA - CRIAR & COLORIR (colorir.html)
+   Classes isoladas para não conflitar com outras páginas
+===================================================== */
+
+/* Container geral */
+.colorir-container {
+    width: 95%;
+    max-width: 1300px;
+    margin: 35px auto;
+}
+
+/* Título */
+.colorir-titulo-area {
+    background-color: #A7C7E7;
+    padding: 18px;
+    border-radius: 14px;
+    text-align: center;
+    font-size: 1.6rem;
+    color: #0E4D64;
+    font-weight: 700;
+}
+
+.colorir-conteudo {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: 25px;
+    margin-top: 25px;
+}
+
+/* LISTA DE DESENHOS */
+.colorir-desenhos-lista {
+    background-color: #F8F9FA;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+}
+
+.colorir-desenho-item {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.colorir-desenho-item img {
+    width: 100%;
+    border-radius: 12px;
+}
+
+.colorir-btn-escolher {
+    width: 100%;
+    margin-top: 10px;
+    padding: 12px;
+    background-color: #5B8FB9;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.colorir-btn-escolher:hover {
+    transform: scale(1.05);
+}
+
+/* ÁREA CENTRAL DO DESENHO */
+.colorir-area-desenho {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+    text-align: center;
+}
+
+.colorir-desenho-display {
+    width: 70%;
+    max-width: 380px;
+    border-radius: 10px;
+}
+
+/* Voltar botão */
+.colorir-btn-voltar {
+    margin-top: 20px;
+    background-color: #CDE8D5;
+    color: #2b3d3b;
+    padding: 12px 28px;
+    border-radius: 14px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.colorir-btn-voltar:hover {
+    background-color: #98c79f;
+    transform: scale(1.05);
+}
+
+/* FERRAMENTAS */
+.colorir-ferramentas {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+}
+
+.colorir-icones div {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+.colorir-icones img {
+    width: 28px;
+}
+
+/* paleta */
+.colorir-paleta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 15px 0;
+}
+
+.colorir-paleta .cor {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid #ddd;
+}
+
+.colorir-btn-acao {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 14px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.colorir-btn-acao.azul {
+    background-color: #A7C7E7;
+    color: #0E4D64;
+}
+
+.colorir-btn-acao.verde {
+    background-color: #CDE8D5;
+    color: #0E4D64;
+}
+
+/* Responsividade */
+@media (max-width: 992px) {
+    .colorir-conteudo {
+        grid-template-columns: 1fr;
+    }
+    .colorir-desenho-display {
+        width: 85%;
+    }
+}
+
+/* =============================
+      QUEBRA-CABEÇA - MUNDOTEA
+   ============================= */
+
+.qc-container {
+    width: 90%;
+    margin: 35px auto;
+}
+
+.qc-box {
+    background: #fff;
+    padding: 35px;
+    border-radius: 20px;
+    width: 90%;
+    margin: 25px auto;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+}
+
+.qc-title {
+    background: #A7C7E7;
+    color: #5B8FB9;
+    font-size: 1.5rem;
+    padding: 14px;
+    border-radius: 16px;
+    font-weight: 700;
+    text-align: center;
+}
+
+/* GRID */
+.qc-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    margin-top: 30px;
+}
+
+.qc-card {
+    background: #F8F9FA;
+    border-radius: 18px;
+    padding: 20px;
+    text-align: center;
+    border: 2px solid #A7C7E7;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    transition: 0.3s ease;
+}
+
+.qc-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+.qc-card img {
+    width: 110px;
+    border-radius: 10px;
+}
+
+.qc-card h3 {
+    margin: 10px 0 5px;
+    color: #5B8FB9;
+}
+
+.qc-card p {
+    color: #555;
+}
+
+.qc-btn-montar {
+    margin-top: 12px;
+    width: 100%;
+    padding: 12px;
+    background: #A7C7E7;
+    color: #2b3d3b;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.qc-btn-montar:hover {
+    background: #8fb8d5;
+    transform: scale(1.05);
+}
+
+.qc-destaque {
+    border-width: 3px;
+}
+
+/* VOLTAR */
+.qc-area-voltar {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.qc-btn-voltar {
+    background-color: #CDE8D5;
+    color: #2b3d3b;
+    padding: 12px 28px;
+    border-radius: 14px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.25s ease;
+    display: inline-block;
+}
+
+.qc-btn-voltar:hover {
+    background-color: #98c79f;
+    transform: scale(1.06);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+}
+
+/* RESPONSIVIDADE */
+@media (max-width: 900px) {
+    .qc-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .qc-grid {
+        grid-template-columns: 1fr;
+    }
+    .qc-box {
+        width: 95%;
+        padding: 25px;
+    }
+    .qc-btn-voltar {
+        width: 80%;
+    }
+}
+
+/* =========================================
+   ATIVIDADES TERAPÊUTICAS - MUNDOTEA
+   ========================================= */
+
+.atividades-container {
+    background-color: #ffffff;
+    border-radius: 20px;
+    padding: 40px;
+    width: 95%;
+    max-width: 1100px;
+    margin: 40px auto;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.atividades-titulo-area {
+    background-color: #A7C7E7;
+    padding: 20px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 30px;
+}
+
+.atividades-titulo-area img {
+    width: 45px;
+}
+
+.atividades-titulo-area h2 {
+    color: #2b3d3b;
+    font-size: 1.8rem;
+    margin: 0;
+    font-weight: 700;
+}
+
+.atividades-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+}
+
+.atividades-card {
+    background-color: #F8F9FA;
+    border-radius: 18px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    padding: 25px 20px;
+    text-align: center;
+    transition: 0.3s ease;
+}
+
+.atividades-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+.atividades-img {
+    width: 90px;
+    margin-bottom: 15px;
+}
+
+.atividades-card h3 {
+    color: #2b3d3b;
+    font-size: 1.4rem;
+    margin-bottom: 8px;
+}
+
+.atividades-card p {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 18px;
+}
+
+.atividades-btn {
+    background-color: #5B8FB9;
+    color: white;
+    display: inline-block;
+    padding: 10px 22px;
+    border-radius: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.atividades-btn:hover {
+    background-color: #4a7ca3;
+    transform: scale(1.05);
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+    .atividades-titulo-area {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .atividades-img {
+        width: 70px;
+    }
+
+    .atividades-btn {
+        width: 90%;
+    }
+}
+
+/* ============================  
+        PALETA MUNDO TEA  
+============================= */
+:root {
+    --azul-escuro: #5B8FB9;
+    --azul-claro: #A7C7E7;
+    --verde-claro: #CDE8D5;
+    --cinza-claro: #E9ECEF;
+    --branco-gelo: #F8F9FA;
+    --texto: #2b3d3b;
+}
+
+/* ===== CONTEÚDO ===== */
+
+.container {
+    display: flex;
+    width: 90%;
+    margin: 40px auto;
+    gap: 30px;
+}
+
+/* ===== QUADRO DO CALENDÁRIO ===== */
+
+.calendario-box {
+    flex: 3;
+    background: #fff;
+    border-radius: 22px;
+    padding: 30px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+}
+
+.titulo-area {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--azul-claro);
+    padding: 15px;
+    border-radius: 18px;
+    gap: 10px;
+}
+
+.titulo-area h2 {
+    margin: 0;
+    color: var(--azul-escuro);
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.titulo-area img {
+    width: 32px;
+}
+
+.mes {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--texto);
+}
+
+/* ===== TABELA ===== */
+
+.tabela-calendario {
+    width: 100%;
+    margin-top: 25px;
+    border-collapse: collapse;
+    font-size: 1.1rem;
+}
+
+.tabela-calendario th {
+    background: var(--cinza-claro);
+    padding: 10px;
+    font-weight: 700;
+    color: var(--azul-escuro);
+}
+
+.tabela-calendario td {
+    text-align: center;
+    padding: 18px;
+    border: 1px solid var(--cinza-claro);
+    font-size: 1.1rem;
+}
+
+/* ===== BOTÃO VOLTAR ===== */
+
+.btn-voltar {
+    display: block;
+    width: 200px;
+    margin: 30px auto 0;
+    padding: 12px 20px;
+    text-align: center;
+    background: #98c79f;
+    color: #fff;
+    font-weight: 700;
+    border-radius: 18px;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.btn-voltar:hover {
+    background: #7cb685;
+    transform: scale(1.05);
+}
+
+/* ===== DESTAQUES ===== */
+
+.destaques {
+    flex: 1.2;
+    background: var(--verde-claro);
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+    height: fit-content;
+}
+
+.destaques h3 {
+    text-align: center;
+    font-weight: 700;
+    color: var(--azul-escuro);
+}
+
+.destaque-item {
+    background: #fff;
+    border-radius: 14px;
+    padding: 15px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.destaque-item img {
+    width: 35px;
+}
+
+.destaque-item p {
+    margin: 0;
+    font-size: 0.95rem;
+}
+
+/* ===== RESPONSIVIDADE ===== */
+
+@media (max-width: 900px) {
+    .container {
+        flex-direction: column;
+    }
 }
