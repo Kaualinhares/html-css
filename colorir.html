@@ -38,22 +38,22 @@
             <aside class="colorir-desenhos-lista">
 
                 <div class="colorir-desenho-item">
-                    <img src="imagens/desenho1.png" alt="">
+                    <img src="imagens/foguete-colorir.jpg" alt="" data-img="imagens/foguete-colorir.jpg">
                     <button class="colorir-btn-escolher">Escolher</button>
                 </div>
 
                 <div class="colorir-desenho-item">
-                    <img src="imagens/desenho2.png" alt="">
+                    <img src="imagens/castelo-colorir.jpg" alt="" data-img="imagens/castelo-colorir.jpg">
                     <button class="colorir-btn-escolher">Escolher</button>
                 </div>
 
                 <div class="colorir-desenho-item">
-                    <img src="imagens/desenho3.png" alt="">
+                    <img src="imagens/monstro-colorir.jpg" alt="" data-img="imagens/monstro-colorir.jpg">
                     <button class="colorir-btn-escolher">Escolher</button>
                 </div>
 
                 <div class="colorir-desenho-item">
-                    <img src="imagens/desenho4.png" alt="">
+                    <img src="imagens/reino-colorir.jpg" alt="" data-img="imagens/reino-colorir.jpg">
                     <button class="colorir-btn-escolher">Escolher</button>
                 </div>
 
@@ -61,32 +61,37 @@
 
             <!-- ÁREA CENTRAL DO DESENHO -->
             <section class="colorir-area-desenho">
-                <img src="imagens/desenho-base.png" class="colorir-desenho-display" alt="Desenho para colorir">
-                <button class="colorir-btn-voltar" onclick="voltarMenu()">Voltar ao Menu</button>
+
+                <!-- TROQUEI IMG POR CANVAS -->
+                <canvas id="canvas-desenho" width="500" height="500"></canvas>
+
+                <div class="voltar-container">
+                    <a href="index.html" class="btn-voltar">Voltar ao Menu</a>
+                </div>
             </section>
 
             <!-- FERRAMENTAS -->
             <aside class="colorir-ferramentas">
 
                 <div class="colorir-icones">
-                    <div><img src="imagens/pincel.png" alt=""> Pincel</div>
+                    <div id="btnPincel"><img src="imagens/pincel.png" alt=""> Pincel</div>
                     <div><img src="imagens/lapis.png" alt=""> Lápis</div>
                     <div><img src="imagens/preencher.png" alt=""> Preencher</div>
                     <div><img src="imagens/gota.png" alt=""> Tinta</div>
-                    <div><img src="imagens/borracha.png" alt=""> Borracha</div>
-                    <div><img src="imagens/lixeira.png" alt=""> Apagar</div>
+                    <div id="btnBorracha"><img src="imagens/borracha.png" alt=""> Borracha</div>
+                    <div id="btnLimpar"><img src="imagens/lixeira.png" alt=""> Apagar</div>
                 </div>
 
                 <div class="colorir-paleta">
-                    <span class="cor" style="background:#ff0000"></span>
-                    <span class="cor" style="background:#ff8000"></span>
-                    <span class="cor" style="background:#ffff00"></span>
-                    <span class="cor" style="background:#00cc00"></span>
-                    <span class="cor" style="background:#0066ff"></span>
-                    <span class="cor" style="background:#8000ff"></span>
-                    <span class="cor" style="background:#ff00ff"></span>
-                    <span class="cor" style="background:#000000"></span>
-                    <span class="cor" style="background:#ffffff; border:1px solid #ccc"></span>
+                    <span class="cor" data-cor="#ff0000" style="background:#ff0000"></span>
+                    <span class="cor" data-cor="#ff8000" style="background:#ff8000"></span>
+                    <span class="cor" data-cor="#ffff00" style="background:#ffff00"></span>
+                    <span class="cor" data-cor="#00cc00" style="background:#00cc00"></span>
+                    <span class="cor" data-cor="#0066ff" style="background:#0066ff"></span>
+                    <span class="cor" data-cor="#8000ff" style="background:#8000ff"></span>
+                    <span class="cor" data-cor="#ff00ff" style="background:#ff00ff"></span>
+                    <span class="cor" data-cor="#000000" style="background:#000000"></span>
+                    <span class="cor" data-cor="#ffffff" style="background:#ffffff; border:1px solid #ccc"></span>
                 </div>
 
                 <button class="colorir-btn-acao azul">Desfazer</button>
@@ -97,10 +102,83 @@
         </div>
     </main>
 
+    <!-- ========= JAVASCRIPT ========= -->
     <script>
-        function voltarMenu() {
-            window.location.href = "index.html";
+        const canvas = document.getElementById("canvas-desenho");
+        const ctx = canvas.getContext("2d");
+
+        let desenhando = false;
+        let corAtual = "#000000";
+        let modo = "pincel"; // ou "borracha"
+        let imagemAtual = new Image();
+
+        // =============== CARREGAR IMAGEM NO CANVAS ===============
+        function carregarDesenho(src) {
+            imagemAtual.src = src;
+            imagemAtual.onload = () => {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(imagemAtual, 0, 0, canvas.width, canvas.height);
+            };
         }
+
+        // Carrega o monstro ao abrir
+        window.onload = () => {
+            carregarDesenho("imagens/monstro-colorir.jpg");
+        };
+
+        // =============== TROCAR DESENHO AO CLICAR EM ESCOLHER ===============
+        document.querySelectorAll(".colorir-btn-escolher").forEach(btn => {
+            btn.addEventListener("click", () => {
+                const nova = btn.parentElement.querySelector("img").dataset.img;
+                carregarDesenho(nova);
+            });
+        });
+
+        // =============== PALETA ===============
+        document.querySelectorAll(".cor").forEach(c => {
+            c.addEventListener("click", () => {
+                corAtual = c.dataset.cor;
+                modo = "pincel";
+            });
+        });
+
+        // =============== PINCEL ===============
+        canvas.addEventListener("mousedown", () => desenhando = true);
+        canvas.addEventListener("mouseup", () => { desenhando = false; ctx.beginPath(); });
+        canvas.addEventListener("mouseleave", () => { desenhando = false; ctx.beginPath(); });
+
+        canvas.addEventListener("mousemove", (e) => {
+            if (!desenhando) return;
+
+            const bounds = canvas.getBoundingClientRect();
+            const x = e.clientX - bounds.left;
+            const y = e.clientY - bounds.top;
+
+            ctx.lineWidth = 10;
+            ctx.lineCap = "round";
+
+            ctx.strokeStyle = modo === "borracha" ? "white" : corAtual;
+
+            ctx.lineTo(x, y);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+        });
+
+        // =============== BORRACHA ===============
+        document.getElementById("btnBorracha").addEventListener("click", () => {
+            modo = "borracha";
+        });
+
+        // =============== LIMPAR TUDO ===============
+        document.getElementById("btnLimpar").addEventListener("click", () => {
+            carregarDesenho(imagemAtual.src); // recarrega o desenho sem pintura
+        });
+
+        // =============== PINCEL NORMAL ===============
+        document.getElementById("btnPincel").addEventListener("click", () => {
+            modo = "pincel";
+        });
     </script>
 
 </body>
