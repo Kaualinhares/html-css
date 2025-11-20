@@ -1,31 +1,119 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/png" href="imagens/logo_mundotea.png">
-  <title>MundoTEA - Histórias Interativas</title>
-  <link rel="stylesheet" href="css/estilo.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MundoTEA - Meu Perfil</title>
+    <link rel="icon" type="image/png" href="imagens/logo_mundotea.png">
+    <link rel="stylesheet" href="css/estilo.css">
 </head>
+
 <body>
 
-  <header class="header">
-    <div class="logo">
-        <img src="imagens/logo_mundotea.png" alt="Logo MundoTEA">
-        <h1 class="titulo-site"><span class="mundo">Mundo</span><span class="tea">TEA</span></h1>
-    </div>
+    <!-- ======== CABEÇALHO PADRÃO ======== -->
+    <header class="header">
+        <div class="logo">
+            <img src="imagens/logo_mundotea.png" alt="Logo MundoTEA">
+            <h1 class="titulo-site"><span class="mundo">Mundo</span><span class="tea">TEA</span></h1>
+        </div>
 
-    <div class="user-actions">
-      <a href="perfil.html" class="profile-icon">
-          <img src="imagens/iconegenerico.png" alt="Perfil Usuário">
-      </a>
-    </div>
-  </header>
+        <div class="user-actions">
+            <a href="perfil.html" class="profile-icon">
+                <img src="imagens/iconegenerico.png" alt="Perfil Usuário">
+            </a>
+        </div>
+    </header>
 
+    <!-- ======================================================= -->
+    <!-- =====================  PERFIL  ========================= -->
+    <!-- ======================================================= -->
 
-    <div class="voltar-container">
-      <a href="index.html" class="btn-voltar">Voltar ao Menu</a>
-    </div>
+    <main class="perfil-container">
+
+        <h2 class="perfil-titulo">Meu Perfil</h2>
+
+        <div class="perfil-bloco">
+
+            <!-- ====== INFORMAÇÕES PESSOAIS ====== -->
+            <section class="perfil-informacoes">
+                <h3 class="perfil-subtitulo">Informações Pessoais</h3>
+
+                <div class="perfil-info-conteudo">
+
+                    <div class="perfil-foto">
+                        <img src="imagens/iconegenerico.png" alt="Foto do Usuário">
+                    </div>
+
+                    <div class="perfil-dados">
+                        <p class="perfil-nome">Nome de Usuário</p>
+                        <p class="perfil-email">Email: usuario.teste@email.com</p>
+
+                        <label for="nascimento">Data de Nascimento:</label>
+                        <input type="date" id="nascimento">
+
+                        <label for="progresso">Nível de Progresso:</label>
+                        <select id="progresso">
+                            <option value="">Selecione...</option>
+                            <option value="iniciante">Iniciante</option>
+                            <option value="intermediario">Intermediário</option>
+                            <option value="avancado">Avançado</option>
+                        </select>
+
+                        <div class="perfil-botoes">
+                            <button class="btn-editar">Editar Perfil</button>
+                            <button class="btn-senha">Alterar Senha</button>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- ====== MINHAS CONQUISTAS ====== -->
+            <section class="perfil-conquistas">
+                <h3 class="perfil-subtitulo">Minhas Conquistas 🏅</h3>
+
+                <div class="conquistas-grid">
+
+                    <div class="conquista-card">
+                        <img src="imagens/icon_livros.png" alt="">
+                        <p>10 Histórias Lidas</p>
+                    </div>
+
+                    <div class="conquista-card">
+                        <img src="imagens/icon_quebra.png" alt="">
+                        <p>5 Quebra-Cabeças Montados</p>
+                    </div>
+
+                    <div class="conquista-card">
+                        <img src="imagens/icon_pintura.png" alt="">
+                        <p>20 Desenhos Coloridos</p>
+                    </div>
+
+                    <div class="conquista-card">
+                        <img src="imagens/icon_estrela.png" alt="">
+                        <p>Primeira Aventura</p>
+                    </div>
+
+                    <div class="conquista-card">
+                        <img src="imagens/icon_trofeu.png" alt="">
+                        <p>Missão Cumprida!</p>
+                    </div>
+
+                    <div class="conquista-card">
+                        <img src="imagens/icon_laco.png" alt="">
+                        <p>Amigo TEA</p>
+                    </div>
+
+                </div>
+
+            </section>
+
+        </div>
+
+        <div class="voltar-container">
+          <a href="index.html" class="btn-voltar">Voltar ao Menu</a>
+        </div>
+    </main>
 
 </body>
 </html>

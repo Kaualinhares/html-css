@@ -1,0 +1,147 @@
+/* ===== PÁGINA ===== */
+.cadastro-page {
+  background-color: #E9ECEF;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+}
+
+.cadastro-wrapper {
+  display: flex;
+  width: 90%;
+  max-width: 1000px;
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  overflow: hidden;
+}
+
+/* ===== LADO ESQUERDO ===== */
+.cadastro-side {
+  flex: 1;
+  background-color: #0E4D64;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+}
+
+.cadastro-side img {
+  width: 100%;
+  max-width: 400px;
+}
+
+/* ===== FORM ===== */
+.cadastro-box {
+  flex: 1;
+  background: #F8F9FA;
+  padding: 40px;
+  text-align: center;
+}
+
+.cadastro-logo {
+  width: 80px;
+  margin-bottom: 5px;
+}
+
+.mundo { color: #0E4D64; font-weight: 600; }
+.tea { color: #6FC3C0; font-weight: 600; }
+
+/* ===== ETAPAS ===== */
+.cadastro-etapas {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.etapa {
+  padding: 8px 15px;
+  border-radius: 20px;
+  background: #d1d1d1;
+  color: #333;
+  font-size: 0.9rem;
+}
+
+.etapa.ativa {
+  background: #0E4D64;
+  color: #fff;
+}
+
+/* ===== CAMPOS ===== */
+.cadastro-step {
+  width: 100%;
+  max-width: 330px;
+  margin: 0 auto;
+}
+
+.cadastro-step input,
+.cadastro-step select,
+.cadastro-step textarea {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border-radius: 10px;
+  border: 1px solid #ced4da;
+  font-size: 1rem;
+  outline: none;
+}
+
+.cadastro-step textarea {
+  height: 90px;
+  resize: none;
+}
+
+/* ===== BOTÕES ===== */
+.cadastro-btn {
+  width: 100%;
+  padding: 12px;
+  background: #0E4D64;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.cadastro-btn:hover {
+  background: #097A9C;
+}
+
+.cadastro-btn.voltar {
+  background: #6c757d;
+}
+
+.cadastro-btn.voltar:hover {
+  background: #5a6268;
+}
+
+.botoes {
+  display: flex;
+  gap: 10px;
+}
+
+/* ===== OCULTO ===== */
+.oculto { display: none; }
+
+/* ===== RODAPÉ ===== */
+.cadastro-footer {
+  margin-top: 15px;
+}
+
+.cadastro-footer a {
+  color: #0E4D64;
+  text-decoration: none;
+}
+
+.cadastro-footer a:hover { text-decoration: underline; }
+
+/* ===== RESPONSIVO ===== */
+@media (max-width: 768px) {
+  .cadastro-wrapper { flex-direction: column; }
+  .cadastro-side { display: none; }
+}

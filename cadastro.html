@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MundoTEA - Cadastro</title>
+  <link rel="icon" type="image/png" href="imagens/logo_mundotea.png">
+  <link rel="stylesheet" href="css/estilo-cadastro.css">
+</head>
+
+<body class="cadastro-page">
+
+  <div class="cadastro-wrapper">
+
+    <!-- LADO ESQUERDO -->
+    <div class="cadastro-side">
+      <img src="imagens/loginimg.png" alt="Imagem cadastro">
+    </div>
+
+    <!-- LADO DIREITO -->
+    <div class="cadastro-box">
+
+      <div class="cadastro-header">
+        <img src="imagens/logo_mundotea.png" class="cadastro-logo">
+        <h1><span class="mundo">Mundo</span><span class="tea">TEA</span></h1>
+      </div>
+
+      <!-- ETAPAS -->
+      <div class="cadastro-etapas">
+        <span class="etapa ativa" id="et1">Conta</span>
+        <span class="etapa oculto" id="et2">Criança</span>
+        <span class="etapa oculto" id="et3">Responsáveis</span>
+        <span class="etapa oculto" id="etT2">Terapeuta</span>
+      </div>
+
+      <!-- FORMULÁRIO -->
+      <form id="formCadastro">
+
+        <!-- ETAPA 1 - CONTA -->
+        <div class="cadastro-step" id="step1">
+
+          <select id="tipo_usuario" required>
+            <option value="" disabled selected>Selecione o tipo de conta</option>
+            <option value="crianca">Cadastro de Criança</option>
+            <option value="terapeuta">Cadastro de Terapeuta</option>
+          </select>
+
+          <input type="email" id="email" placeholder="E-mail" required>
+          <input type="password" id="senha" placeholder="Senha" required>
+          <input type="password" id="confirmar_senha" placeholder="Confirmar senha" required>
+
+          <button type="button" class="cadastro-btn" onclick="validarEtapa1()">Avançar</button>
+        </div>
+
+        <!-- ETAPA 2 - CRIANÇA -->
+        <div class="cadastro-step oculto" id="step2">
+          <input type="text" id="nome_crianca" placeholder="Nome da criança">
+          <input type="date" id="data_nasc">
+          <select id="nivel_autismo">
+            <option value="" disabled selected>Nível de autismo</option>
+            <option value="1">Leve (Nível 1)</option>
+            <option value="2">Moderado (Nível 2)</option>
+            <option value="3">Severo (Nível 3)</option>
+          </select>
+          <textarea id="necessidades" placeholder="Necessidades específicas"></textarea>
+
+          <div class="botoes">
+            <button type="button" class="cadastro-btn voltar" onclick="irParaEtapa(1)">Voltar</button>
+            <button type="button" class="cadastro-btn" onclick="irParaEtapa(3)">Avançar</button>
+          </div>
+        </div>
+
+        <!-- ETAPA 3 - RESPONSÁVEIS -->
+        <div class="cadastro-step oculto" id="step3">
+          <input type="text" id="pai" placeholder="Nome do pai">
+          <input type="text" id="mae" placeholder="Nome da mãe">
+          <input type="text" id="telefone" placeholder="Telefone dos responsáveis">
+          <input type="email" id="email_resp" placeholder="E-mail dos responsáveis">
+
+          <div class="botoes">
+            <button type="button" class="cadastro-btn voltar" onclick="irParaEtapa(2)">Voltar</button>
+            <button type="submit" class="cadastro-btn salvar">Finalizar Cadastro</button>
+          </div>
+        </div>
+
+        <!-- ETAPA TERAPEUTA -->
+        <div class="cadastro-step oculto" id="stepT2">
+
+          <input type="text" id="nome_terapeuta" placeholder="Nome completo do terapeuta">
+          <input type="text" id="tel_terapeuta" placeholder="Telefone">
+          <input type="text" id="especialidade" placeholder="Especialidade">
+
+          <div class="botoes">
+            <button type="button" class="cadastro-btn voltar" onclick="irParaEtapa(1)">Voltar</button>
+            <button type="submit" class="cadastro-btn salvar">Finalizar Cadastro</button>
+          </div>
+        </div>
+
+      </form>
+
+      <div class="cadastro-footer">
+        <p>Já possui conta? <a href="login.html">Entrar</a></p>
+      </div>
+
+    </div>
+  </div>
+
+<script>
+
+function irParaEtapa(num) {
+  document.querySelectorAll(".cadastro-step").forEach(el => el.classList.add("oculto"));
+  document.querySelectorAll(".etapa").forEach(el => el.classList.remove("ativa"));
+
+  document.getElementById("step" + num).classList.remove("oculto");
+  document.getElementById("et" + num).classList.remove("oculto");
+  document.getElementById("et" + num).classList.add("ativa");
+}
+
+function validarEtapa1() {
+  const tipo = document.getElementById("tipo_usuario").value;
+  const senha = document.getElementById("senha").value;
+  const confirmar = document.getElementById("confirmar_senha").value;
+
+  if (!tipo) {
+    alert("Selecione o tipo de cadastro.");
+    return;
+  }
+
+  if (senha !== confirmar) {
+    alert("As senhas não coincidem!");
+    return;
+  }
+
+  document.getElementById("et2").classList.add("oculto");
+  document.getElementById("et3").classList.add("oculto");
+  document.getElementById("etT2").classList.add("oculto");
+
+  if (tipo === "terapeuta") {
+
+    document.getElementById("etT2").classList.remove("oculto");
+
+    document.querySelectorAll(".cadastro-step").forEach(el => el.classList.add("oculto"));
+    document.getElementById("stepT2").classList.remove("oculto");
+
+    document.getElementById("et1").classList.remove("ativa");
+    document.getElementById("etT2").classList.add("ativa");
+
+    return;
+  }
+
+  document.getElementById("et2").classList.remove("oculto");
+  document.getElementById("et3").classList.remove("oculto");
+  irParaEtapa(2);
+}
+
+document.getElementById("formCadastro").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const tipo = document.getElementById("tipo_usuario").value;
+
+  let dados = {};
+
+  if (tipo === "crianca") {
+    dados = {
+      tipo_usuario: "crianca",
+      email: document.getElementById("email").value.trim(),
+      senha: document.getElementById("senha").value.trim(),
+
+      nome_crianca: document.getElementById("nome_crianca").value.trim(),
+      data_nascimento: document.getElementById("data_nasc").value,
+      nivel_autismo: document.getElementById("nivel_autismo").value,
+      necessidades: document.getElementById("necessidades").value.trim(),
+
+      pai: document.getElementById("pai").value.trim(),
+      mae: document.getElementById("mae").value.trim(),
+      telefone_resp: document.getElementById("telefone").value.trim(),
+      email_resp: document.getElementById("email_resp").value.trim()
+    };
+
+  } else {
+    dados = {
+      tipo_usuario: "terapeuta",
+      email: document.getElementById("email").value.trim(),
+      senha: document.getElementById("senha").value.trim(),
+
+      nome_terapeuta: document.getElementById("nome_terapeuta").value.trim(),
+      telefone: document.getElementById("tel_terapeuta").value.trim(),
+      especialidade: document.getElementById("especialidade").value.trim()
+    };
+  }
+
+  console.log("Dados enviados:", dados);
+
+  window.location.href = "login.html";
+});
+
+</script>
+
+</body>
+</html>
