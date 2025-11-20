@@ -9,63 +9,99 @@
 </head>
 <body>
 
-    <header class="header">
-      <div class="logo">
-          <img src="imagens/logo_mundotea.png" alt="Logo MundoTEA">
-          <h1 class="titulo-site"><span class="mundo">Mundo</span><span class="tea">TEA</span></h1>
-      </div>
+<header class="header">
+  <div class="logo">
+      <img src="imagens/logo_mundotea.png" alt="Logo MundoTEA">
+      <h1 class="titulo-site"><span class="mundo">Mundo</span><span class="tea">TEA</span></h1>
+  </div>
 
-      <div class="user-actions">
-        <a href="login.html" class="btn-link">Login</a>
-        <a href="cadastro.html" class="btn-link">Cadastrar-se</a>
-        <a href="perfil.html" class="profile-icon">
-            <img src="imagens/iconegenerico.png" alt="Perfil Usuário">
-        </a>
-      </div>
-    </header>
+  <div class="user-actions">
+    <a id="btnLogin" href="login.html" class="btn-link">Login</a>
+    <a id="btnCadastro" href="cadastro.html" class="btn-link">Cadastrar-se</a>
 
-    <main class="container">
-      <section class="boas-vindas">
-          <img src="/imagens/mundotea_boasvindas.png" alt="Logo Boas-vindas" class="boas-vindas-img">
-      </section>
+    <a href="perfil.html" class="profile-icon">
+        <img id="iconePerfil" src="imagens/iconegenerico.png" alt="Perfil Usuário">
+    </a>
+  </div>
+</header>
 
-      <section class="menu-principal">
-        <div class="grid-menu">
-          <button class="btn azul-escuro" onclick="abrirJogos()">🎲 Jogos Lúdicos</button>
-          <button class="btn azul-claro" onclick="abrirHistoria()">📖 Histórias Interativas</button>
-          <button class="btn verde" onclick="abriColorir()">🎨 Colorir</button>
-          <button class="btn laranja" onclick="abriQuebraCabeca()">🧩 Quebra-Cabeças</button>
-          <button class="btn verde-medio" onclick="abriAtividade()">💚 Atividades Terapêuticas</button>
-          <button class="btn verde-claro" onclick="abriCalendario()">📅 Calendário de Recomendações</button>
-        </div>
-      </section>
+<main class="container">
+  <section class="boas-vindas">
+      <img src="/imagens/mundotea_boasvindas.png" alt="Logo Boas-vindas" class="boas-vindas-img">
+  </section>
 
-      <section class="dica-dia">
-        <p>📚 Hoje é dia de ler história!</p>
-      </section>
-    </main>
+  <section class="menu-principal">
+    <div class="grid-menu">
+
+      <button class="btn azul-escuro" onclick="verificarLoginAntesDeEntrar('jogos-ludicos.html')">
+        🎲 Jogos Lúdicos
+      </button>
+
+      <button class="btn azul-claro" onclick="verificarLoginAntesDeEntrar('historias-interativas.html')">
+        📖 Histórias Interativas
+      </button>
+
+      <button class="btn verde" onclick="verificarLoginAntesDeEntrar('colorir.html')">
+        🎨 Colorir
+      </button>
+
+      <button class="btn laranja" onclick="verificarLoginAntesDeEntrar('quebra-cabeca.html')">
+        🧩 Quebra-Cabeças
+      </button>
+
+      <button class="btn verde-medio" onclick="verificarLoginAntesDeEntrar('atividades.html')">
+        💚 Atividades Terapêuticas
+      </button>
+
+      <button class="btn verde-claro" onclick="verificarLoginAntesDeEntrar('calendario.html')">
+        📅 Calendário de Recomendações
+      </button>
+
+    </div>
+  </section>
+
+  <section class="dica-dia">
+    <p>📚 Hoje é dia de ler história!</p>
+  </section>
+</main>
 
 <script>
-    function abrirJogos() {
-      window.location.href = "jogos-ludicos.html"; // leva para a página de jogos
+// -----------------------------------------
+// VERIFICAR LOGIN PARA LIBERAR PÁGINAS
+// (SEM ALERT) — SÓ REDIRECIONA E MOSTRA NO CONSOLE
+// -----------------------------------------
+function verificarLoginAntesDeEntrar(pagina) {
+    const usuario = JSON.parse(localStorage.getItem("usuarioLogado"));
+
+    if (!usuario) {
+        console.log("Acesso bloqueado: usuário não está logado.");
+        window.location.href = "login.html";
+        return;
     }
-    function abrirHistoria() {
-      window.location.href = "historias-interativas.html"; // leva para a página de jogos
+
+    window.location.href = pagina;
+}
+
+// -----------------------------------------
+// AJUSTAR BOTÕES LOGIN/CADASTRO + FOTO PERFIL
+// -----------------------------------------
+document.addEventListener("DOMContentLoaded", () => {
+    const usuario = JSON.parse(localStorage.getItem("usuarioLogado"));
+
+    const btnLogin = document.getElementById("btnLogin");
+    const btnCadastro = document.getElementById("btnCadastro");
+    const iconePerfil = document.getElementById("iconePerfil");
+
+    if (usuario) {
+        btnLogin.style.display = "none";
+        btnCadastro.style.display = "none";
+
+        if (usuario.foto) {
+            iconePerfil.src = usuario.foto;
+        }
     }
-    function abriColorir() {
-      window.location.href = "colorir.html"; // leva para a página de jogos
-    }
-    function abriQuebraCabeca() {
-      window.location.href = "quebra-cabeca.html"; // leva para a página de jogos
-    }
-    function abriCalendario() {
-      window.location.href = "calendario.html"; // leva para a página de jogos
-    }
-    function abriAtividade() {
-      window.location.href = "atividades.html"; // leva para a página de jogos
-    }
-  </script>
-  
+});
+</script>
 
 </body>
 </html>

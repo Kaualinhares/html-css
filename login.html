@@ -21,9 +21,9 @@
         <h1><span class="mundo">Mundo</span><span class="tea">TEA</span></h1>
       </div>
 
-      <form class="login-form">
-        <input type="text" placeholder="Usuário(a)" required>
-        <input type="password" placeholder="Senha" required>
+      <form class="login-form" id="formLogin">
+        <input type="text" id="usuario" placeholder="Usuário(a)" required>
+        <input type="password" id="senha" placeholder="Senha" required>
         <button type="submit" class="login-btn">Entrar</button>
         <a href="#" class="login-link">Esqueceu sua senha?</a>
       </form>
@@ -34,5 +34,36 @@
     </div>
 
   </div>
+
+  <script>
+    // 🔐 Login fictício para testes
+    const loginCorreto = {
+      usuario: "usuarioTeste",
+      senha: "1234"
+    };
+
+    document.getElementById("formLogin").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const usuarioDigitado = document.getElementById("usuario").value.trim();
+      const senhaDigitada = document.getElementById("senha").value.trim();
+
+      // Validação
+      if (usuarioDigitado === loginCorreto.usuario && senhaDigitada === loginCorreto.senha) {
+        console.log("Login realizado com sucesso!");
+
+        // Salva usuário no localStorage
+        localStorage.setItem("usuarioLogado", JSON.stringify({
+          usuario: loginCorreto.usuario
+        }));
+
+        // Vai para a página principal
+        window.location.href = "index.html";
+      } else {
+        console.log("Credenciais incorretas.");
+      }
+    });
+  </script>
+
 </body>
 </html>
