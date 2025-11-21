@@ -22,9 +22,10 @@
       </div>
 
       <form class="login-form" id="formLogin">
-        <input type="text" id="usuario" placeholder="Usuário(a)" required>
+        <input type="email" id="usuario" placeholder="Email" required>
         <input type="password" id="senha" placeholder="Senha" required>
         <button type="submit" class="login-btn">Entrar</button>
+        <p id="mensagemErro" class="erro" style="color:red; display:none;"></p>
         <a href="#" class="login-link">Esqueceu sua senha?</a>
       </form>
 
@@ -36,31 +37,51 @@
   </div>
 
   <script>
-    // 🔐 Login fictício para testes
-    const loginCorreto = {
-      usuario: "usuarioTeste",
-      senha: "1234"
-    };
+    const formLogin = document.getElementById("formLogin");
+    const mensagemErro = document.getElementById("mensagemErro");
 
-    document.getElementById("formLogin").addEventListener("submit", function(e) {
+    formLogin.addEventListener("submit", async function(e) {
       e.preventDefault();
 
-      const usuarioDigitado = document.getElementById("usuario").value.trim();
-      const senhaDigitada = document.getElementById("senha").value.trim();
+      // Limpar mensagem de erro
+      mensagemErro.style.display = "none";
+      mensagemErro.textContent = "";
 
-      // Validação
-      if (usuarioDigitado === loginCorreto.usuario && senhaDigitada === loginCorreto.senha) {
-        console.log("Login realizado com sucesso!");
+      const email = document.getElementById("usuario").value.trim();
+      const senha = document.getElementById("senha").value.trim();
 
-        // Salva usuário no localStorage
-        localStorage.setItem("usuarioLogado", JSON.stringify({
-          usuario: loginCorreto.usuario
-        }));
+      if (!email || !senha) {
+        mensagemErro.textContent = "Preencha todos os campos!";
+        mensagemErro.style.display = "block";
+        return;
+      }
 
-        // Vai para a página principal
-        window.location.href = "index.html";
-      } else {
-        console.log("Credenciais incorretas.");
+      try {
+        const response = await fetch("http://localhost:5000/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: email, senha: senha })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          // Login bem-sucedido
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("usuarioLogado", email);
+
+          // Redirecionar para página inicial
+          window.location.href = "index.html";
+        } else {
+          // Mostrar mensagem de erro da API
+          mensagemErro.textContent = data.erro || "Credenciais incorretas.";
+          mensagemErro.style.display = "block";
+        }
+
+      } catch (error) {
+        console.error("Erro ao conectar à API:", error);
+        mensagemErro.textContent = "Não foi possível conectar à API.";
+        mensagemErro.style.display = "block";
       }
     });
   </script>

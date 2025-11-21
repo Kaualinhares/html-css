@@ -7,7 +7,6 @@
   <link rel="icon" type="image/png" href="imagens/logo_mundotea.png">
   <link rel="stylesheet" href="css/estilo-cadastro.css">
 </head>
-
 <body class="cadastro-page">
 
   <div class="cadastro-wrapper">
@@ -30,7 +29,6 @@
         <span class="etapa ativa" id="et1">Conta</span>
         <span class="etapa oculto" id="et2">Criança</span>
         <span class="etapa oculto" id="et3">Responsáveis</span>
-        <span class="etapa oculto" id="etT2">Terapeuta</span>
       </div>
 
       <!-- FORMULÁRIO -->
@@ -38,31 +36,23 @@
 
         <!-- ETAPA 1 - CONTA -->
         <div class="cadastro-step" id="step1">
-
-          <select id="tipo_usuario" required>
-            <option value="" disabled selected>Selecione o tipo de conta</option>
-            <option value="crianca">Cadastro de Criança</option>
-            <option value="terapeuta">Cadastro de Terapeuta</option>
-          </select>
-
-          <input type="email" id="email" placeholder="E-mail" required>
-          <input type="password" id="senha" placeholder="Senha" required>
-          <input type="password" id="confirmar_senha" placeholder="Confirmar senha" required>
-
+          <input type="email" id="email" name="email" placeholder="E-mail da criança" required>
+          <input type="password" id="senha" name="senha" placeholder="Senha" required>
+          <input type="password" id="confirmar_senha" name="confirmar_senha" placeholder="Confirmar senha" required>
           <button type="button" class="cadastro-btn" onclick="validarEtapa1()">Avançar</button>
         </div>
 
         <!-- ETAPA 2 - CRIANÇA -->
         <div class="cadastro-step oculto" id="step2">
-          <input type="text" id="nome_crianca" placeholder="Nome da criança">
-          <input type="date" id="data_nasc">
-          <select id="nivel_autismo">
+          <input type="text" id="nome_crianca" name="nome_crianca" placeholder="Nome da criança" required>
+          <input type="date" id="data_nasc" name="data_nasc" required>
+          <select id="nivel_autismo" name="nivel_autismo" required>
             <option value="" disabled selected>Nível de autismo</option>
-            <option value="1">Leve (Nível 1)</option>
-            <option value="2">Moderado (Nível 2)</option>
-            <option value="3">Severo (Nível 3)</option>
+            <option value="1">Suporte Nível 1</option>
+            <option value="2">Suporte Nível 2</option>
+            <option value="3">Suporte Nível 3</option>
           </select>
-          <textarea id="necessidades" placeholder="Necessidades específicas"></textarea>
+          <textarea id="necessidades" name="necessidades" placeholder="Necessidades específicas (opcional)"></textarea>
 
           <div class="botoes">
             <button type="button" class="cadastro-btn voltar" onclick="irParaEtapa(1)">Voltar</button>
@@ -72,26 +62,13 @@
 
         <!-- ETAPA 3 - RESPONSÁVEIS -->
         <div class="cadastro-step oculto" id="step3">
-          <input type="text" id="pai" placeholder="Nome do pai">
-          <input type="text" id="mae" placeholder="Nome da mãe">
-          <input type="text" id="telefone" placeholder="Telefone dos responsáveis">
-          <input type="email" id="email_resp" placeholder="E-mail dos responsáveis">
+          <input type="text" id="suporte1" name="suporte1" placeholder="Nome do responsável 1" required>
+          <input type="text" id="suporte2" name="suporte2" placeholder="Nome do responsável 2" required>
+          <input type="text" id="telefone" name="telefone" placeholder="Telefone" required>
+          <input type="email" id="email_resp" name="email_resp" placeholder="E-mail do responsável" required>
 
           <div class="botoes">
             <button type="button" class="cadastro-btn voltar" onclick="irParaEtapa(2)">Voltar</button>
-            <button type="submit" class="cadastro-btn salvar">Finalizar Cadastro</button>
-          </div>
-        </div>
-
-        <!-- ETAPA TERAPEUTA -->
-        <div class="cadastro-step oculto" id="stepT2">
-
-          <input type="text" id="nome_terapeuta" placeholder="Nome completo do terapeuta">
-          <input type="text" id="tel_terapeuta" placeholder="Telefone">
-          <input type="text" id="especialidade" placeholder="Especialidade">
-
-          <div class="botoes">
-            <button type="button" class="cadastro-btn voltar" onclick="irParaEtapa(1)">Voltar</button>
             <button type="submit" class="cadastro-btn salvar">Finalizar Cadastro</button>
           </div>
         </div>
@@ -106,94 +83,65 @@
   </div>
 
 <script>
-
 function irParaEtapa(num) {
   document.querySelectorAll(".cadastro-step").forEach(el => el.classList.add("oculto"));
   document.querySelectorAll(".etapa").forEach(el => el.classList.remove("ativa"));
 
   document.getElementById("step" + num).classList.remove("oculto");
-  document.getElementById("et" + num).classList.remove("oculto");
   document.getElementById("et" + num).classList.add("ativa");
 }
 
 function validarEtapa1() {
-  const tipo = document.getElementById("tipo_usuario").value;
   const senha = document.getElementById("senha").value;
   const confirmar = document.getElementById("confirmar_senha").value;
-
-  if (!tipo) {
-    alert("Selecione o tipo de cadastro.");
-    return;
-  }
 
   if (senha !== confirmar) {
     alert("As senhas não coincidem!");
     return;
   }
 
-  document.getElementById("et2").classList.add("oculto");
-  document.getElementById("et3").classList.add("oculto");
-  document.getElementById("etT2").classList.add("oculto");
-
-  if (tipo === "terapeuta") {
-
-    document.getElementById("etT2").classList.remove("oculto");
-
-    document.querySelectorAll(".cadastro-step").forEach(el => el.classList.add("oculto"));
-    document.getElementById("stepT2").classList.remove("oculto");
-
-    document.getElementById("et1").classList.remove("ativa");
-    document.getElementById("etT2").classList.add("ativa");
-
-    return;
-  }
-
-  document.getElementById("et2").classList.remove("oculto");
-  document.getElementById("et3").classList.remove("oculto");
   irParaEtapa(2);
 }
 
-document.getElementById("formCadastro").addEventListener("submit", function(e) {
+document.getElementById("formCadastro").addEventListener("submit", async function(e){
   e.preventDefault();
 
-  const tipo = document.getElementById("tipo_usuario").value;
+  // Coleta os dados do formulário
+  const dados = {
+    tipo_usuario: "crianca",
+    email: document.getElementById("email").value.trim(),
+    senha: document.getElementById("senha").value.trim(),
+    nome_crianca: document.getElementById("nome_crianca").value.trim(),
+    data_nascimento: document.getElementById("data_nasc").value,
+    nivel_autismo: document.getElementById("nivel_autismo").value,
+    necessidades: document.getElementById("necessidades").value.trim(),
+    pai: document.getElementById("suporte1").value.trim(),
+    mae: document.getElementById("suporte2").value.trim(),
+    telefone_resp: document.getElementById("telefone").value.trim(),
+    email_resp: document.getElementById("email_resp").value.trim()
+  };
 
-  let dados = {};
+  try {
+    const response = await fetch("http://localhost:5000/registrar", {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify(dados)
+    });
 
-  if (tipo === "crianca") {
-    dados = {
-      tipo_usuario: "crianca",
-      email: document.getElementById("email").value.trim(),
-      senha: document.getElementById("senha").value.trim(),
+    const resData = await response.json();
 
-      nome_crianca: document.getElementById("nome_crianca").value.trim(),
-      data_nascimento: document.getElementById("data_nasc").value,
-      nivel_autismo: document.getElementById("nivel_autismo").value,
-      necessidades: document.getElementById("necessidades").value.trim(),
+    if(response.ok){
+      alert("Cadastro realizado com sucesso!");
+      window.location.href = "login.html";
+    } else {
+      alert(resData.erro || "Erro ao cadastrar criança.");
+    }
 
-      pai: document.getElementById("pai").value.trim(),
-      mae: document.getElementById("mae").value.trim(),
-      telefone_resp: document.getElementById("telefone").value.trim(),
-      email_resp: document.getElementById("email_resp").value.trim()
-    };
-
-  } else {
-    dados = {
-      tipo_usuario: "terapeuta",
-      email: document.getElementById("email").value.trim(),
-      senha: document.getElementById("senha").value.trim(),
-
-      nome_terapeuta: document.getElementById("nome_terapeuta").value.trim(),
-      telefone: document.getElementById("tel_terapeuta").value.trim(),
-      especialidade: document.getElementById("especialidade").value.trim()
-    };
+  } catch(err){
+    console.error("Erro API:", err);
+    alert("Não foi possível conectar à API.");
   }
-
-  console.log("Dados enviados:", dados);
-
-  window.location.href = "login.html";
 });
-
 </script>
 
 </body>
