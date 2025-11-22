@@ -11,7 +11,7 @@
 
 <body>
 
-  <!-- Cabeçalho igual -->
+  <!-- Cabeçalho -->
   <header class="header">
     <div class="logo">
       <img src="imagens/logo_mundotea.png" alt="Logo MundoTEA">
@@ -24,7 +24,6 @@
     </div>
   </header>
 
-  <!-- CONTAINER PRINCIPAL DO JOGO -->
   <main class="memoria-container">
 
     <header class="memoria-header">
@@ -38,68 +37,7 @@
     </div>
 
     <section class="memoria-grid" id="memoriaGrid">
-
-      <!-- CARTAS -->
-      <div class="memoria-card" data-animal="leao">
-        <div class="memoria-card-inner">
-          <div class="memoria-front"></div>
-          <div class="memoria-back">
-            <img src="imagens/leao.jpg" alt="Leão">
-            <span class="memoria-nome">Leão</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="memoria-card" data-animal="flamingo">
-        <div class="memoria-card-inner">
-          <div class="memoria-front"></div>
-          <div class="memoria-back">
-            <img src="imagens/flamingo.jpg" alt="Flamingo">
-            <span class="memoria-nome">Flamingo</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="memoria-card" data-animal="tartaruga">
-        <div class="memoria-card-inner">
-          <div class="memoria-front"></div>
-          <div class="memoria-back">
-            <img src="imagens/tartaruga.jpg" alt="Tartaruga">
-            <span class="memoria-nome">Tartaruga</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="memoria-card" data-animal="girafa">
-        <div class="memoria-card-inner">
-          <div class="memoria-front"></div>
-          <div class="memoria-back">
-            <img src="imagens/girafa.jpg" alt="Girafa">
-            <span class="memoria-nome">Girafa</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="memoria-card" data-animal="elefante">
-        <div class="memoria-card-inner">
-          <div class="memoria-front"></div>
-          <div class="memoria-back">
-            <img src="imagens/elefante.jpg" alt="Elefante">
-            <span class="memoria-nome">Elefante</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="memoria-card" data-animal="macaco">
-        <div class="memoria-card-inner">
-          <div class="memoria-front"></div>
-          <div class="memoria-back">
-            <img src="imagens/macaco.jpg" alt="Macaco">
-            <span class="memoria-nome">Macaco</span>
-          </div>
-        </div>
-      </div>
-
+      <!-- As cartas serão geradas via JS -->
     </section>
 
     <div class="voltar-container">
@@ -108,112 +46,172 @@
 
   </main>
 
-  <!-- ===== SCRIPT ===== -->
-  <script>
-    let grid = document.getElementById("memoriaGrid");
-    let cards = [...grid.children];
-    let primeira = null;
-    let segunda = null;
-    let travar = false;
+<script>
+let grid = document.getElementById("memoriaGrid");
+let tempo = 0;
+let intervalo = null;
+let cronometroIniciado = false;
+let primeira = null;
+let segunda = null;
+let travar = false;
 
-    let tempo = 0;
-    let intervalo = null;
-    let cronometroIniciado = false;
+let sessaoId = null;
+const atividadeId = 2; // ID da atividade "Jogo da Memória" na sua tabela
 
-    // DUPLICAR CARTAS
-    cards.forEach(card => {
-      let clone = card.cloneNode(true);
-      grid.appendChild(clone);
+// Lista de animais
+const animais = ["leao","flamingo","tartaruga","girafa","elefante","macaco"];
+
+// Função para criar o deck duplicando cartas
+function criarDeck() {
+    return [...animais, ...animais].map(animal => {
+        const card = document.createElement("div");
+        card.classList.add("memoria-card");
+        card.dataset.animal = animal;
+        card.innerHTML = `
+            <div class="memoria-card-inner">
+                <div class="memoria-front"></div>
+                <div class="memoria-back">
+                    <img src="imagens/${animal}.jpg" alt="${animal}">
+                    <span class="memoria-nome">${animal.charAt(0).toUpperCase() + animal.slice(1)}</span>
+                </div>
+            </div>
+        `;
+        return card;
     });
+}
 
-    cards = [...grid.children];
+// Embaralhar
+function embaralharDeck(array) {
+    return array.sort(() => Math.random() - 0.5);
+}
 
-    function embaralhar() {
-      cards.sort(() => Math.random() - 0.5).forEach(c => grid.appendChild(c));
-    }
-
-    function reiniciarJogo() {
-      clearInterval(intervalo);
-      cronometroIniciado = false;
-      tempo = 0;
-      document.getElementById("timer").textContent = "00:00";
-
-      cards.forEach(card => {
-        card.classList.remove("virada", "matched");
-      });
-
-      embaralhar();
-      primeira = null;
-      segunda = null;
-      travar = false;
-    }
-
-    // Embaralhar inicial
-    embaralhar();
-
-    // Eventos cartas
-    cards.forEach(card => {
-      card.addEventListener("click", () => virar(card));
+// Renderiza grid
+function renderizarGrid() {
+    grid.innerHTML = "";
+    const deck = embaralharDeck(criarDeck());
+    deck.forEach(card => {
+        card.addEventListener("click", () => virar(card));
+        grid.appendChild(card);
     });
+}
 
-    // Evento botão reiniciar
-    document.getElementById("btnReiniciar").addEventListener("click", reiniciarJogo);
-
-    function iniciarCronometro() {
-      intervalo = setInterval(() => {
+// Cronômetro
+function iniciarCronometro() {
+    intervalo = setInterval(() => {
         tempo++;
         let m = String(Math.floor(tempo / 60)).padStart(2, "0");
         let s = String(tempo % 60).padStart(2, "0");
         document.getElementById("timer").textContent = `${m}:${s}`;
-      }, 1000);
-    }
-
-function virar(card) {
-  if (!cronometroIniciado) {
-    cronometroIniciado = true;
-    iniciarCronometro();
-  }
-
-  if (travar || card.classList.contains("virada") || card.classList.contains("matched")) return;
-
-  card.classList.add("virada");
-
-  if (!primeira) {
-    primeira = card;
-  } else {
-    segunda = card;
-    travar = true;
-
-    let a1 = primeira.dataset.animal;
-    let a2 = segunda.dataset.animal;
-
-    if (a1 === a2) {
-      setTimeout(() => {
-        primeira.classList.add("matched");
-        segunda.classList.add("matched");
-        primeira = null;
-        segunda = null;
-        travar = false;
-
-        // Verificar se todas as cartas foram acertadas
-        if (cards.every(c => c.classList.contains("matched"))) {
-          clearInterval(intervalo);
-        }
-
-      }, 600);
-    } else {
-      setTimeout(() => {
-        primeira.classList.remove("virada");
-        segunda.classList.remove("virada");
-        primeira = null;
-        segunda = null;
-        travar = false;
-      }, 900);
-    }
-  }
+    }, 1000);
 }
 
-  </script>
+// Virar carta
+function virar(card) {
+    if (!cronometroIniciado) {
+        cronometroIniciado = true;
+        iniciarCronometro();
+    }
+    if (travar || card.classList.contains("virada") || card.classList.contains("matched")) return;
+
+    card.classList.add("virada");
+
+    if (!primeira) {
+        primeira = card;
+    } else {
+        segunda = card;
+        travar = true;
+
+        if (primeira.dataset.animal === segunda.dataset.animal) {
+            setTimeout(() => {
+                primeira.classList.add("matched");
+                segunda.classList.add("matched");
+                primeira = null;
+                segunda = null;
+                travar = false;
+
+                if ([...grid.children].every(c => c.classList.contains("matched"))) {
+                    clearInterval(intervalo);
+                    finalizarSessaoMemoria();
+                }
+            }, 600);
+        } else {
+            setTimeout(() => {
+                primeira.classList.remove("virada");
+                segunda.classList.remove("virada");
+                primeira = null;
+                segunda = null;
+                travar = false;
+            }, 900);
+        }
+    }
+}
+
+// Inicia sessão API
+async function iniciarSessaoMemoria() {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    try {
+        const res = await fetch("http://localhost:5000/sessoes", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + token
+            },
+            body: JSON.stringify({ atividade_id: atividadeId })
+        });
+        const data = await res.json();
+        sessaoId = data.sessao_id;
+        console.log("Sessão iniciada:", sessaoId);
+    } catch (err) {
+        console.error("Erro ao iniciar sessão:", err);
+    }
+}
+
+// Finaliza sessão
+async function finalizarSessaoMemoria() {
+    if (!sessaoId) return;
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    const score = [...grid.children].filter(c => c.classList.contains("matched")).length;
+    try {
+        await fetch("http://localhost:5000/sessoes/atualizar", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + token
+            },
+            body: JSON.stringify({
+                sessao_id: sessaoId,
+                tempo_gasto_segundos: tempo,
+                score: score,
+                acuracia: 100
+            })
+        });
+        console.log("Sessão atualizada!");
+    } catch (err) {
+        console.error("Erro ao atualizar sessão:", err);
+    }
+}
+
+// Reiniciar jogo
+document.getElementById("btnReiniciar").addEventListener("click", () => {
+    clearInterval(intervalo);
+    cronometroIniciado = false;
+    tempo = 0;
+    document.getElementById("timer").textContent = "00:00";
+    primeira = null;
+    segunda = null;
+    travar = false;
+    renderizarGrid();
+    iniciarSessaoMemoria();
+});
+
+// Inicializa
+window.onload = () => {
+    renderizarGrid();
+    iniciarSessaoMemoria();
+};
+</script>
 
 </body>
 </html>

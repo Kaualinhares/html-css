@@ -4,6 +4,8 @@ API MundoTEA - Visualização de perfil apenas
 Flask + Flask-RESTful + Flask-JWT-Extended + psycopg2 + CORS
 """
 
+import base64
+import uuid
 from flask import Flask, request, jsonify
 from flask_restful import Resource, Api
 from flask_cors import CORS
@@ -87,6 +89,7 @@ class Registrar(Resource):
         telefone_responsavel = data.get("telefone_resp") or data.get("telefone_responsavel")
         email_responsavel = data.get("email_resp") or data.get("email_responsavel")
 
+        # Verifica campos obrigatórios
         obrigatorios = [email, senha, nome_crianca, data_nascimento,
                         nivel_autismo, nome_pai, nome_mae, telefone_responsavel, email_responsavel]
         if not all(obrigatorios):
@@ -95,10 +98,12 @@ class Registrar(Resource):
         conn = get_conn()
         cur = conn.cursor()
         try:
+            # Verifica se email já existe
             cur.execute("SELECT login_id FROM login WHERE email = %s", (email,))
             if cur.fetchone():
                 return {"erro": "Email já cadastrado"}, 400
 
+            # Cria login
             senha_hash = hash_senha(senha)
             cur.execute(
                 "INSERT INTO login (email, senha_hash) VALUES (%s, %s) RETURNING login_id",
@@ -106,6 +111,7 @@ class Registrar(Resource):
             )
             login_id = cur.fetchone()[0]
 
+            # Cria criança
             cur.execute("""
                 INSERT INTO crianca (
                     login_id, nome, data_nascimento, nivel_autismo,
@@ -118,10 +124,50 @@ class Registrar(Resource):
             ))
             crianca_id = cur.fetchone()[0]
 
+            # -------------------------------
+            # Conquistas iniciais
+            # -------------------------------
+            conquistas_iniciais = ["Primeira Sessão", "Primeiro Colorir", "Primeiro Quebra-Cabeça"]
+            for nome_conquista in conquistas_iniciais:
+                cur.execute("""
+                    INSERT INTO conquistas(crianca_id, nome, atingido)
+                    VALUES (%s, %s, %s)
+                    ON CONFLICT(crianca_id, nome) DO NOTHING
+                """, (crianca_id, nome_conquista, False))
+
+            # -------------------------------
+            # Preferências iniciais
+            # -------------------------------
+            preferencias_iniciais = {"tema": "claro", "som": "on", "dificuldade": "1"}
+            for chave, valor in preferencias_iniciais.items():
+                cur.execute("""
+                    INSERT INTO preferencias(crianca_id, chave, valor)
+                    VALUES (%s, %s, %s)
+                    ON CONFLICT(crianca_id, chave) DO NOTHING
+                """, (crianca_id, chave, valor))
+
+            # -------------------------------
+            # Recomendações iniciais
+            # -------------------------------
+            cur.execute("SELECT atividade_id FROM atividades")
+            atividades = cur.fetchall()
+            for (atividade_id,) in atividades:
+                cur.execute("""
+                    INSERT INTO recomendacoes(crianca_id, atividade_id, score, versao_algoritmo)
+                    VALUES (%s, %s, %s, %s)
+                """, (crianca_id, atividade_id, 0, "v1"))
+
+            # Commit final
             conn.commit()
 
+            # Cria token JWT
             token = create_access_token(identity=str(login_id))
-            return {"mensagem": "Cadastro realizado com sucesso!", "token": token, "login_id": login_id, "crianca_id": crianca_id}, 201
+            return {
+                "mensagem": "Cadastro realizado com sucesso!",
+                "token": token,
+                "login_id": login_id,
+                "crianca_id": crianca_id
+            }, 201
 
         except Exception as e:
             conn.rollback()
@@ -129,6 +175,7 @@ class Registrar(Resource):
         finally:
             cur.close()
             conn.close()
+
 
 class Login(Resource):
     def post(self):
@@ -251,6 +298,153 @@ class AtualizarPerfil(Resource):
             cur.close()
             conn.close()
 
+class CriarSessao(Resource):
+    @jwt_required()
+    def post(self):
+        login_id = int(get_jwt_identity())
+        data = request.get_json(force=True)
+        atividade_id = data.get("atividade_id")
+
+        if not atividade_id:
+            return {"erro":"atividade_id é obrigatório"},400
+
+        conn = get_conn()
+        cur = conn.cursor()
+        try:
+            cur.execute("SELECT crianca_id FROM crianca WHERE login_id=%s",(login_id,))
+            crianca_id = cur.fetchone()[0]
+
+            cur.execute("""
+                INSERT INTO sessoes(crianca_id,atividade_id)
+                VALUES(%s,%s) RETURNING sessao_id
+            """,(crianca_id,atividade_id))
+            sessao_id = cur.fetchone()[0]
+            conn.commit()
+            return {"sessao_id":sessao_id},201
+        finally:
+            cur.close()
+            conn.close()
+            
+class AtualizarSessao(Resource):
+    @jwt_required()
+    def put(self):
+        data = request.get_json(force=True)
+        sessao_id = data.get("sessao_id")
+        tempo_gasto = data.get("tempo_gasto_segundos", 0)
+        score = data.get("score", 0)
+        acuracia = data.get("acuracia", 0)
+
+        if not sessao_id:
+            return {"erro": "sessao_id é obrigatório"}, 400
+
+        conn = get_conn()
+        cur = conn.cursor()
+        try:
+            # Atualiza a sessão
+            cur.execute("""
+                UPDATE sessoes
+                SET terminado_em = now(), tempo_gasto_segundos = %s, score = %s, acuracia = %s
+                WHERE sessao_id = %s
+            """, (tempo_gasto, score, acuracia, sessao_id))
+
+            # Pega crianca_id e título da atividade dessa sessão
+            cur.execute("""
+                SELECT s.crianca_id, a.titulo
+                FROM sessoes s
+                INNER JOIN atividades a ON s.atividade_id = a.atividade_id
+                WHERE s.sessao_id = %s
+            """, (sessao_id,))
+            row = cur.fetchone()
+            if row:
+                crianca_id, titulo_atividade = row
+
+                # Exemplo: se o título for "Colorir", desbloqueia conquista "Primeiro Colorir"
+                if titulo_atividade == "Colorir":
+                    cur.execute("""
+                        UPDATE conquistas
+                        SET atingido = TRUE
+                        WHERE crianca_id = %s AND nome = 'Primeiro Colorir'
+                    """, (crianca_id,))
+                elif titulo_atividade == "Quebra-Cabeça":
+                    cur.execute("""
+                        UPDATE conquistas
+                        SET atingido = TRUE
+                        WHERE crianca_id = %s AND nome = 'Primeiro Quebra-Cabeça'
+                    """, (crianca_id,))
+                elif titulo_atividade == "Jogo da Memória":
+                    cur.execute("""
+                        UPDATE conquistas
+                        SET atingido = TRUE
+                        WHERE crianca_id = %s AND nome = 'Missão Cumprida!'
+                    """, (crianca_id,))
+
+            conn.commit()
+            return {"mensagem": "Sessão atualizada e conquistas desbloqueadas"}, 200
+
+        except Exception as e:
+            conn.rollback()
+            return {"erro": "Erro ao atualizar sessão", "detalhes": str(e)}, 500
+        finally:
+            cur.close()
+            conn.close()
+
+
+class SalvarImagem(Resource):
+    @jwt_required()
+    def post(self):
+        data = request.get_json(force=True)
+        sessao_id = data.get("sessao_id")
+        imagem = data.get("imagem")  # Base64
+        if not sessao_id or not imagem:
+            return {"erro":"sessao_id e imagem são obrigatórios"},400
+
+        token_login_id = int(get_jwt_identity())
+        conn = get_conn()
+        cur = conn.cursor()
+        try:
+            # Salvar imagem no servidor
+            filename = f"{uuid.uuid4()}.png"
+            filepath = f"static/imagens/{filename}"
+            with open(filepath,"wb") as f:
+                f.write(base64.b64decode(imagem.split(",")[1]))
+
+            # Descobrir a criança
+            cur.execute("SELECT crianca_id FROM crianca WHERE login_id=%s", (token_login_id,))
+            crianca_id = cur.fetchone()[0]
+
+            # Atualizar conquista "Primeiro Colorir" se ainda não atingida
+            cur.execute("""
+                UPDATE conquistas
+                SET atingido = TRUE
+                WHERE crianca_id = %s AND nome = 'Primeiro Colorir' AND atingido = FALSE
+            """, (crianca_id,))
+
+            conn.commit()
+            return {"mensagem":"Imagem salva e conquista atualizada se aplicável","arquivo":filename},201
+        except Exception as e:
+            conn.rollback()
+            return {"erro":"Erro ao salvar imagem/conquista","detalhes": str(e)},500
+        finally:
+            cur.close()
+            conn.close()
+
+
+class Conquistas(Resource):
+    @jwt_required()
+    def get(self):
+        login_id = get_jwt_identity()
+        conn = get_conn()
+        cur = conn.cursor()
+        try:
+            cur.execute("""
+                SELECT nome, imagem FROM conquistas 
+                WHERE crianca_id = (SELECT crianca_id FROM crianca WHERE login_id=%s)
+                AND atingido = TRUE
+            """, (login_id,))
+            conquistas = [{"nome": nome, "imagem": imagem} for nome, imagem in cur.fetchall()]
+            return conquistas, 200
+        finally:
+            cur.close()
 
 
 # -----------------------
@@ -261,6 +455,11 @@ api.add_resource(Registrar, "/registrar")
 api.add_resource(Login, "/login")
 api.add_resource(Perfil, "/perfil")
 api.add_resource(AtualizarPerfil, "/perfil/atualizar")
+
+api.add_resource(CriarSessao,"/sessoes")
+api.add_resource(AtualizarSessao,"/sessoes/atualizar")
+api.add_resource(SalvarImagem,"/sessoes/salvar_imagem")
+api.add_resource(Conquistas,"/conquistas")
 
 # -----------------------
 # RUN

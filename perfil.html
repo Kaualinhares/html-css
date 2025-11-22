@@ -72,16 +72,11 @@
             </div>
         </section>
 
-        <!-- MINHAS CONQUISTAS (opcional) -->
+        <!-- MINHAS CONQUISTAS -->
         <section class="perfil-conquistas">
             <h3 class="perfil-subtitulo">Minhas Conquistas 🏅</h3>
-            <div class="conquistas-grid">
-                <div class="conquista-card"><img src="imagens/crie-sua-historia.jpg"><p>10 Histórias Lidas</p></div>
-                <div class="conquista-card"><img src="imagens/icone-quebra-cabeca.png"><p>5 Quebra-Cabeças Montados</p></div>
-                <div class="conquista-card"><img src="imagens/pintura.jpg"><p>20 Desenhos Coloridos</p></div>
-                <div class="conquista-card"><img src="imagens/foguete-universo.jpg"><p>Primeira Aventura</p></div>
-                <div class="conquista-card"><img src="imagens/memoria.png"><p>Missão Cumprida!</p></div>
-                <div class="conquista-card"><img src="imagens/quebra-cabeca.jpg"><p>Amigo TEA</p></div>
+            <div class="conquistas-grid" id="conquistasGrid">
+                <!-- Conquistas serão inseridas dinamicamente -->
             </div>
         </section>
 
@@ -93,16 +88,13 @@
 </main>
 
 <script>
-// Função para habilitar campos
+    // Função para habilitar campos
 function habilitarCampos() {
     const campos = [
         'nomeUsuario', 'nascimento', 'progresso',
         'nomePai', 'nomeMae', 'telefoneResp', 'emailResp'
     ];
-
     campos.forEach(id => document.getElementById(id).disabled = false);
-
-    // Alternar botões
     document.getElementById('btnEditar').style.display = "none";
     document.getElementById('btnSalvar').style.display = "inline-block";
 }
@@ -132,6 +124,9 @@ async function carregarPerfil() {
             document.getElementById('nomeMae').value = data.nome_mae || '';
             document.getElementById('telefoneResp').value = data.telefone_responsavel || '';
             document.getElementById('emailResp').value = data.email_responsavel || '';
+
+            // Carregar conquistas dinâmicas
+            carregarConquistas(token);
         } else {
             alert(data.erro || 'Erro ao carregar perfil');
         }
@@ -142,7 +137,7 @@ async function carregarPerfil() {
     }
 }
 
-// Função para salvar no backend
+// Salvar alterações do perfil
 async function salvarAlteracoes() {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -175,17 +170,10 @@ async function salvarAlteracoes() {
 
         if (res.ok) {
             alert('Alterações salvas com sucesso!');
-
-            const campos = [
-                'nomeUsuario', 'nascimento', 'progresso',
-                'nomePai', 'nomeMae', 'telefoneResp', 'emailResp'
-            ];
-
+            const campos = ['nomeUsuario', 'nascimento', 'progresso', 'nomePai', 'nomeMae', 'telefoneResp', 'emailResp'];
             campos.forEach(id => document.getElementById(id).disabled = true);
-
             document.getElementById('btnSalvar').style.display = "none";
             document.getElementById('btnEditar').style.display = "inline-block";
-
         } else {
             alert(data.erro || 'Erro ao salvar alterações');
         }
@@ -193,6 +181,33 @@ async function salvarAlteracoes() {
     } catch (err) {
         console.error(err);
         alert('Erro ao conectar à API');
+    }
+}
+
+// Carregar conquistas do usuário
+async function carregarConquistas(token) {
+    try {
+        const res = await fetch('http://localhost:5000/conquistas', { // <- ajustado para o endpoint correto
+            headers: { 'Authorization': 'Bearer ' + token }
+        });
+        const data = await res.json();
+
+        const grid = document.getElementById('conquistasGrid');
+        grid.innerHTML = '';
+
+        if (Array.isArray(data) && data.length > 0) {
+            data.forEach(conquista => {
+                const div = document.createElement('div');
+                div.className = 'conquista-card';
+                div.innerHTML = `<img src="${conquista.imagem}" alt="${conquista.nome}"><p>${conquista.nome}</p>`;
+                grid.appendChild(div);
+            });
+        } else {
+            grid.innerHTML = '<p>Nenhuma conquista ainda 😔</p>';
+        }
+
+    } catch (err) {
+        console.error('Erro ao carregar conquistas:', err);
     }
 }
 
@@ -206,6 +221,7 @@ document.getElementById('btnLogout').addEventListener('click', () => {
 });
 
 window.onload = carregarPerfil;
+
 </script>
 
 </body>

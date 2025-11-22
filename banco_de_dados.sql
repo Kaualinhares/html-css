@@ -50,6 +50,16 @@ CREATE TABLE atividades (
   criado_em TIMESTAMP WITH TIME ZONE DEFAULT now()
 );
 
+CREATE TABLE conquistas (
+    conquista_id SERIAL PRIMARY KEY,
+    crianca_id INT REFERENCES crianca(crianca_id) ON DELETE CASCADE,
+    nome VARCHAR(255) NOT NULL,
+    imagem VARCHAR(255),
+    atingido BOOLEAN DEFAULT FALSE,
+    criado_em TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    UNIQUE(crianca_id, nome)
+);
+
 -------------------------------------------------------
 -- SESSÕES
 -------------------------------------------------------

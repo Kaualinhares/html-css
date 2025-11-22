@@ -83,13 +83,60 @@
   </div>
 
 <script>
+// Função para navegar entre etapas
+function irParaEtapa(n) {
+  const steps = document.querySelectorAll(".cadastro-step");
+  const etapas = document.querySelectorAll(".etapa");
+
+  steps.forEach((s) => s.classList.add("oculto"));
+  etapas.forEach((e) => e.classList.remove("ativa"));
+
+  document.getElementById(`step${n}`).classList.remove("oculto");
+  document.getElementById(`et${n}`).classList.add("ativa");
+}
+
+// Valida etapa 1 (conta) antes de avançar
+function validarEtapa1() {
+  const email = document.getElementById("email").value.trim();
+  const senha = document.getElementById("senha").value.trim();
+  const confirmar = document.getElementById("confirmar_senha").value.trim();
+
+  if (!email || !senha || !confirmar) {
+    alert("Preencha todos os campos da etapa 1!");
+    return;
+  }
+
+  if (senha !== confirmar) {
+    alert("As senhas não coincidem!");
+    return;
+  }
+
+  // Avança para a etapa 2
+  irParaEtapa(2);
+}
+
+// Valida etapa 2 antes de avançar
+function validarEtapa2() {
+  const nome = document.getElementById("nome_crianca").value.trim();
+  const data = document.getElementById("data_nasc").value;
+  const nivel = document.getElementById("nivel_autismo").value;
+
+  if (!nome || !data || !nivel) {
+    alert("Preencha todos os campos obrigatórios da criança!");
+    return;
+  }
+
+  irParaEtapa(3);
+}
+
+// Submissão do formulário
 document.getElementById("formCadastro").addEventListener("submit", async function(e){
   e.preventDefault();
 
   const dados = {
     email: document.getElementById("email").value.trim(),
     senha: document.getElementById("senha").value.trim(),
-    nome: document.getElementById("nome_crianca").value.trim(),
+    nome_crianca: document.getElementById("nome_crianca").value.trim(),
     data_nascimento: document.getElementById("data_nasc").value,
     nivel_autismo: document.getElementById("nivel_autismo").value,
     necessidades: document.getElementById("necessidades").value.trim(),
@@ -112,14 +159,16 @@ document.getElementById("formCadastro").addEventListener("submit", async functio
       alert("Cadastro realizado com sucesso!");
       window.location.href = "login.html";
     } else {
-      alert(res.erro);
+      alert(res.erro || "Erro ao cadastrar");
     }
 
   } catch (err) {
+    console.error(err);
     alert("Erro ao conectar à API.");
   }
 });
 </script>
+
 
 </body>
 </html>
