@@ -7,113 +7,206 @@
     <link rel="icon" type="image/png" href="imagens/logo_mundotea.png">
     <link rel="stylesheet" href="css/estilo.css">
 </head>
-
 <body>
 
-    <!-- ======== CABEÇALHO PADRÃO ======== -->
-    <header class="header">
-        <div class="logo">
-            <img src="imagens/logo_mundotea.png" alt="Logo MundoTEA">
-            <h1 class="titulo-site"><span class="mundo">Mundo</span><span class="tea">TEA</span></h1>
-        </div>
+<header class="header">
+    <div class="logo">
+        <img src="imagens/logo_mundotea.png" alt="Logo MundoTEA">
+        <h1 class="titulo-site"><span class="mundo">Mundo</span><span class="tea">TEA</span></h1>
+    </div>
+</header>
 
-        <div class="user-actions">
-            <a href="perfil.html" class="profile-icon">
-                <img src="imagens/iconegenerico.png" alt="Perfil Usuário">
-            </a>
-        </div>
-    </header>
+<main class="perfil-container">
 
-    <!-- ======================================================= -->
-    <!-- =====================  PERFIL  ========================= -->
-    <!-- ======================================================= -->
+    <h2 class="perfil-titulo">Meu Perfil</h2>
 
-    <main class="perfil-container">
+    <div class="perfil-bloco">
 
-        <h2 class="perfil-titulo">Meu Perfil</h2>
+        <section class="perfil-informacoes">
+            <h3 class="perfil-subtitulo">Informações Pessoais</h3>
 
-        <div class="perfil-bloco">
+            <div class="perfil-info-conteudo">
 
-            <!-- ====== INFORMAÇÕES PESSOAIS ====== -->
-            <section class="perfil-informacoes">
-                <h3 class="perfil-subtitulo">Informações Pessoais</h3>
-
-                <div class="perfil-info-conteudo">
-
-                    <div class="perfil-foto">
-                        <img src="imagens/iconegenerico.png" alt="Foto do Usuário">
-                    </div>
-
-                    <div class="perfil-dados">
-                        <p class="perfil-nome">Nome de Usuário</p>
-                        <p class="perfil-email">Email: usuario.teste@email.com</p>
-
-                        <label for="nascimento">Data de Nascimento:</label>
-                        <input type="date" id="nascimento">
-
-                        <label for="progresso">Nível de Progresso:</label>
-                        <select id="progresso">
-                            <option value="">Selecione...</option>
-                            <option value="iniciante">Iniciante</option>
-                            <option value="intermediario">Intermediário</option>
-                            <option value="avancado">Avançado</option>
-                        </select>
-
-                        <div class="perfil-botoes">
-                            <button class="btn-editar">Editar Perfil</button>
-                            <button class="btn-senha">Alterar Senha</button>
-                        </div>
-
-                    </div>
+                <div class="perfil-foto">
+                    <img src="imagens/iconegenerico.png" alt="Foto do Usuário">
                 </div>
-            </section>
 
-            <!-- ====== MINHAS CONQUISTAS ====== -->
-            <section class="perfil-conquistas">
-                <h3 class="perfil-subtitulo">Minhas Conquistas 🏅</h3>
+                <div class="perfil-dados">
 
-                <div class="conquistas-grid">
+                    <label>Nome da Criança:</label>
+                    <input type="text" id="nomeUsuario" disabled>
 
-                    <div class="conquista-card">
-                        <img src="imagens/icon_livros.png" alt="">
-                        <p>10 Histórias Lidas</p>
-                    </div>
+                    <label>Email do Usuário:</label>
+                    <input type="text" id="emailUsuario" disabled>
 
-                    <div class="conquista-card">
-                        <img src="imagens/icon_quebra.png" alt="">
-                        <p>5 Quebra-Cabeças Montados</p>
-                    </div>
+                    <label>Data de Nascimento:</label>
+                    <input type="date" id="nascimento" disabled>
 
-                    <div class="conquista-card">
-                        <img src="imagens/icon_pintura.png" alt="">
-                        <p>20 Desenhos Coloridos</p>
-                    </div>
+                    <label>Nível de Autismo:</label>
+                    <select id="progresso" disabled>
+                        <option value="1">Nível 1</option>
+                        <option value="2">Nível 2</option>
+                        <option value="3">Nível 3</option>
+                    </select>
 
-                    <div class="conquista-card">
-                        <img src="imagens/icon_estrela.png" alt="">
-                        <p>Primeira Aventura</p>
-                    </div>
+                    <label>Nome do Pai:</label>
+                    <input type="text" id="nomePai" disabled>
 
-                    <div class="conquista-card">
-                        <img src="imagens/icon_trofeu.png" alt="">
-                        <p>Missão Cumprida!</p>
-                    </div>
+                    <label>Nome da Mãe:</label>
+                    <input type="text" id="nomeMae" disabled>
 
-                    <div class="conquista-card">
-                        <img src="imagens/icon_laco.png" alt="">
-                        <p>Amigo TEA</p>
+                    <label>Telefone do Responsável:</label>
+                    <input type="text" id="telefoneResp" disabled>
+
+                    <label>Email do Responsável:</label>
+                    <input type="text" id="emailResp" disabled>
+
+                    <!-- BOTÕES NOVOS -->
+                    <div class="perfil-botoes">
+                        <button id="btnEditar" class="btn-perfil editar">Alterar Informações</button>
+                        <button id="btnSalvar" class="btn-perfil salvar" style="display:none;">Salvar Alterações</button>
+                        <button id="btnLogout" class="btn-perfil sair">Sair</button>
                     </div>
 
                 </div>
+            </div>
+        </section>
 
-            </section>
+        <!-- MINHAS CONQUISTAS (opcional) -->
+        <section class="perfil-conquistas">
+            <h3 class="perfil-subtitulo">Minhas Conquistas 🏅</h3>
+            <div class="conquistas-grid">
+                <div class="conquista-card"><img src="imagens/crie-sua-historia.jpg"><p>10 Histórias Lidas</p></div>
+                <div class="conquista-card"><img src="imagens/icone-quebra-cabeca.png"><p>5 Quebra-Cabeças Montados</p></div>
+                <div class="conquista-card"><img src="imagens/pintura.jpg"><p>20 Desenhos Coloridos</p></div>
+                <div class="conquista-card"><img src="imagens/foguete-universo.jpg"><p>Primeira Aventura</p></div>
+                <div class="conquista-card"><img src="imagens/memoria.png"><p>Missão Cumprida!</p></div>
+                <div class="conquista-card"><img src="imagens/quebra-cabeca.jpg"><p>Amigo TEA</p></div>
+            </div>
+        </section>
 
-        </div>
+    </div>
 
-        <div class="voltar-container">
-          <a href="index.html" class="btn-voltar">Voltar ao Menu</a>
-        </div>
-    </main>
+    <div class="voltar-container">
+        <a href="index.html" class="btn-voltar">Voltar ao Menu</a>
+    </div>
+</main>
+
+<script>
+// Função para habilitar campos
+function habilitarCampos() {
+    const campos = [
+        'nomeUsuario', 'nascimento', 'progresso',
+        'nomePai', 'nomeMae', 'telefoneResp', 'emailResp'
+    ];
+
+    campos.forEach(id => document.getElementById(id).disabled = false);
+
+    // Alternar botões
+    document.getElementById('btnEditar').style.display = "none";
+    document.getElementById('btnSalvar').style.display = "inline-block";
+}
+
+// Carregar perfil do backend
+async function carregarPerfil() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        alert('Faça login para acessar o perfil.');
+        window.location.href = 'index.html';
+        return;
+    }
+
+    try {
+        const res = await fetch('http://localhost:5000/perfil', {
+            headers: { 'Authorization': 'Bearer ' + token }
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+            document.getElementById('nomeUsuario').value = data.nome_crianca || '';
+            document.getElementById('emailUsuario').value = data.email_login || '';
+            document.getElementById('nascimento').value = data.data_nascimento ? data.data_nascimento.split('T')[0] : '';
+            document.getElementById('progresso').value = data.nivel_autismo || 1;
+            document.getElementById('nomePai').value = data.nome_pai || '';
+            document.getElementById('nomeMae').value = data.nome_mae || '';
+            document.getElementById('telefoneResp').value = data.telefone_responsavel || '';
+            document.getElementById('emailResp').value = data.email_responsavel || '';
+        } else {
+            alert(data.erro || 'Erro ao carregar perfil');
+        }
+
+    } catch (err) {
+        console.error(err);
+        alert('Erro ao conectar à API');
+    }
+}
+
+// Função para salvar no backend
+async function salvarAlteracoes() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        alert('Faça login para acessar o perfil.');
+        window.location.href = 'index.html';
+        return;
+    }
+
+    const dados = {
+        nome: document.getElementById('nomeUsuario').value,
+        data_nascimento: document.getElementById('nascimento').value,
+        nivel_autismo: parseInt(document.getElementById('progresso').value),
+        nome_pai: document.getElementById('nomePai').value,
+        nome_mae: document.getElementById('nomeMae').value,
+        telefone_responsavel: document.getElementById('telefoneResp').value,
+        email_responsavel: document.getElementById('emailResp').value
+    };
+
+    try {
+        const res = await fetch('http://localhost:5000/perfil/atualizar', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify(dados)
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+            alert('Alterações salvas com sucesso!');
+
+            const campos = [
+                'nomeUsuario', 'nascimento', 'progresso',
+                'nomePai', 'nomeMae', 'telefoneResp', 'emailResp'
+            ];
+
+            campos.forEach(id => document.getElementById(id).disabled = true);
+
+            document.getElementById('btnSalvar').style.display = "none";
+            document.getElementById('btnEditar').style.display = "inline-block";
+
+        } else {
+            alert(data.erro || 'Erro ao salvar alterações');
+        }
+
+    } catch (err) {
+        console.error(err);
+        alert('Erro ao conectar à API');
+    }
+}
+
+// Eventos
+document.getElementById('btnEditar').addEventListener('click', habilitarCampos);
+document.getElementById('btnSalvar').addEventListener('click', salvarAlteracoes);
+document.getElementById('btnLogout').addEventListener('click', () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('login_id');
+    window.location.href = 'index.html';
+});
+
+window.onload = carregarPerfil;
+</script>
 
 </body>
 </html>

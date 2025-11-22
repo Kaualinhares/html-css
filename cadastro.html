@@ -83,42 +83,20 @@
   </div>
 
 <script>
-function irParaEtapa(num) {
-  document.querySelectorAll(".cadastro-step").forEach(el => el.classList.add("oculto"));
-  document.querySelectorAll(".etapa").forEach(el => el.classList.remove("ativa"));
-
-  document.getElementById("step" + num).classList.remove("oculto");
-  document.getElementById("et" + num).classList.add("ativa");
-}
-
-function validarEtapa1() {
-  const senha = document.getElementById("senha").value;
-  const confirmar = document.getElementById("confirmar_senha").value;
-
-  if (senha !== confirmar) {
-    alert("As senhas não coincidem!");
-    return;
-  }
-
-  irParaEtapa(2);
-}
-
 document.getElementById("formCadastro").addEventListener("submit", async function(e){
   e.preventDefault();
 
-  // Coleta os dados do formulário
   const dados = {
-    tipo_usuario: "crianca",
     email: document.getElementById("email").value.trim(),
     senha: document.getElementById("senha").value.trim(),
-    nome_crianca: document.getElementById("nome_crianca").value.trim(),
+    nome: document.getElementById("nome_crianca").value.trim(),
     data_nascimento: document.getElementById("data_nasc").value,
     nivel_autismo: document.getElementById("nivel_autismo").value,
     necessidades: document.getElementById("necessidades").value.trim(),
-    pai: document.getElementById("suporte1").value.trim(),
-    mae: document.getElementById("suporte2").value.trim(),
-    telefone_resp: document.getElementById("telefone").value.trim(),
-    email_resp: document.getElementById("email_resp").value.trim()
+    nome_pai: document.getElementById("suporte1").value.trim(),
+    nome_mae: document.getElementById("suporte2").value.trim(),
+    telefone_responsavel: document.getElementById("telefone").value.trim(),
+    email_responsavel: document.getElementById("email_resp").value.trim()
   };
 
   try {
@@ -128,18 +106,17 @@ document.getElementById("formCadastro").addEventListener("submit", async functio
       body: JSON.stringify(dados)
     });
 
-    const resData = await response.json();
+    const res = await response.json();
 
     if(response.ok){
       alert("Cadastro realizado com sucesso!");
       window.location.href = "login.html";
     } else {
-      alert(resData.erro || "Erro ao cadastrar criança.");
+      alert(res.erro);
     }
 
-  } catch(err){
-    console.error("Erro API:", err);
-    alert("Não foi possível conectar à API.");
+  } catch (err) {
+    alert("Erro ao conectar à API.");
   }
 });
 </script>

@@ -1,229 +1,269 @@
-# ============================
-# API MundoTEA — Arquivo Único
-# Flask + PostgreSQL + JWT + CORS + Flask-RESTful
-# ============================
+# api_mundotea.py
+"""
+API MundoTEA - Visualização de perfil apenas
+Flask + Flask-RESTful + Flask-JWT-Extended + psycopg2 + CORS
+"""
 
 from flask import Flask, request, jsonify
 from flask_restful import Resource, Api
 from flask_cors import CORS
-from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity, create_access_token
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 import psycopg2
 import bcrypt
 from datetime import timedelta
-import json
+import os
 
-# ============================
+# -----------------------
 # CONFIGURAÇÃO
-# ============================
+# -----------------------
+DB_HOST = os.getenv("DB_HOST", "localhost")
+DB_PORT = os.getenv("DB_PORT", "5432")
+DB_NAME = os.getenv("DB_NAME", "MundoTea")
+DB_USER = os.getenv("DB_USER", "postgres")
+DB_PASSWORD = os.getenv("DB_PASSWORD", "1234")
 
-DB_HOST = "localhost"
-DB_NAME = "MundoTea"
-DB_USER = "postgres"
-DB_PASSWORD = "1234"
-SECRET_KEY = "chave_super_secreta"
+JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", "chave_super_secreta")
+JWT_EXPIRES_DAYS = int(os.getenv("JWT_EXPIRES_DAYS", "1"))
 
-# ============================
-# FUNÇÃO DE CONEXÃO
-# ============================
+API_ALLOWED_ORIGINS = [
+    "http://localhost:5500",
+    "http://127.0.0.1:5500",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000"
+]
 
+# -----------------------
+# UTIL - conexão
+# -----------------------
 def get_conn():
     return psycopg2.connect(
-        dbname=DB_NAME, user=DB_USER,
-        password=DB_PASSWORD, host=DB_HOST
+        host=DB_HOST,
+        port=DB_PORT,
+        dbname=DB_NAME,
+        user=DB_USER,
+        password=DB_PASSWORD
     )
 
-# ============================
-# INICIAR APP
-# ============================
+def dict_from_row(row, cols):
+    return {cols[i]: row[i] for i in range(len(cols))}
 
+# -----------------------
+# APP
+# -----------------------
 app = Flask(__name__)
-CORS(app)
-api = Api(app)
+app.config["JWT_SECRET_KEY"] = JWT_SECRET_KEY
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=JWT_EXPIRES_DAYS)
 
-app.config["JWT_SECRET_KEY"] = SECRET_KEY
-app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=1)
+CORS(app, resources={r"/*": {"origins": API_ALLOWED_ORIGINS}})
+api = Api(app)
 jwt = JWTManager(app)
 
-# ============================
-# FUNÇÕES DE AUTENTICAÇÃO
-# ============================
+# -----------------------
+# HELPERS DE SENHA
+# -----------------------
+def hash_senha(senha: str) -> str:
+    return bcrypt.hashpw(senha.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
 
-def hash_senha(senha):
-    return bcrypt.hashpw(senha.encode(), bcrypt.gensalt()).decode()
+def verificar_senha(senha: str, senha_hash: str) -> bool:
+    return bcrypt.checkpw(senha.encode("utf-8"), senha_hash.encode("utf-8"))
 
-def verificar_senha(senha, senha_hash):
-    return bcrypt.checkpw(senha.encode(), senha_hash.encode())
-
-# ============================
-# RECURSOS
-# ============================
-
-# ===== HOME =====
+# -----------------------
+# ENDPOINTS
+# -----------------------
 class Home(Resource):
     def get(self):
         return {"status": "API MundoTEA funcionando!"}, 200
 
-# ===== LOGIN E CADASTRO =====
 class Registrar(Resource):
     def post(self):
-        data = request.json
-
-        # Campos obrigatórios
+        data = request.get_json(force=True)
         email = data.get("email")
         senha = data.get("senha")
-        nome_crianca = data.get("nome_crianca")
+        nome_crianca = data.get("nome_crianca") or data.get("nome")
         data_nascimento = data.get("data_nascimento")
         nivel_autismo = data.get("nivel_autismo")
-        nome_pai = data.get("pai")
-        nome_mae = data.get("mae")
-        telefone_responsavel = data.get("telefone_resp")
-        email_responsavel = data.get("email_resp")
+        nome_pai = data.get("pai") or data.get("nome_pai")
+        nome_mae = data.get("mae") or data.get("nome_mae")
+        telefone_responsavel = data.get("telefone_resp") or data.get("telefone_responsavel")
+        email_responsavel = data.get("email_resp") or data.get("email_responsavel")
 
-        # Campo opcional
-        necessidades = data.get("necessidades")
-
-        # Validar campos obrigatórios
         obrigatorios = [email, senha, nome_crianca, data_nascimento,
-                        nivel_autismo, nome_pai, nome_mae,
-                        telefone_responsavel, email_responsavel]
+                        nivel_autismo, nome_pai, nome_mae, telefone_responsavel, email_responsavel]
         if not all(obrigatorios):
             return {"erro": "Todos os campos obrigatórios devem ser preenchidos!"}, 400
 
         conn = get_conn()
         cur = conn.cursor()
+        try:
+            cur.execute("SELECT login_id FROM login WHERE email = %s", (email,))
+            if cur.fetchone():
+                return {"erro": "Email já cadastrado"}, 400
 
-        # Verificar se email já existe
-        cur.execute("SELECT email FROM login WHERE email=%s", (email,))
-        if cur.fetchone():
+            senha_hash = hash_senha(senha)
+            cur.execute(
+                "INSERT INTO login (email, senha_hash) VALUES (%s, %s) RETURNING login_id",
+                (email, senha_hash)
+            )
+            login_id = cur.fetchone()[0]
+
+            cur.execute("""
+                INSERT INTO crianca (
+                    login_id, nome, data_nascimento, nivel_autismo,
+                    nome_pai, nome_mae, telefone_responsavel, email_responsavel
+                ) VALUES (%s,%s,%s,%s,%s,%s,%s,%s) RETURNING crianca_id
+            """, (
+                login_id, nome_crianca, data_nascimento,
+                int(nivel_autismo),
+                nome_pai, nome_mae, telefone_responsavel, email_responsavel
+            ))
+            crianca_id = cur.fetchone()[0]
+
+            conn.commit()
+
+            token = create_access_token(identity=str(login_id))
+            return {"mensagem": "Cadastro realizado com sucesso!", "token": token, "login_id": login_id, "crianca_id": crianca_id}, 201
+
+        except Exception as e:
+            conn.rollback()
+            return {"erro": "Erro interno ao cadastrar", "detalhes": str(e)}, 500
+        finally:
             cur.close()
             conn.close()
-            return {"erro": "Email já cadastrado"}, 400
-
-        # Criar login
-        senha_hash = hash_senha(senha)
-        cur.execute("""
-            INSERT INTO login (email, senha_hash)
-            VALUES (%s, %s) RETURNING login_id
-        """, (email, senha_hash))
-        login_id = cur.fetchone()[0]
-
-        # Inserir dados da criança e dos responsáveis
-        cur.execute("""
-            INSERT INTO crianca (
-                login_id, nome, data_nascimento, nivel_autismo, necessidades,
-                nome_pai, nome_mae, telefone_responsavel, email_responsavel
-            )
-            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)
-        """, (
-            login_id, nome_crianca, data_nascimento, nivel_autismo, necessidades,
-            nome_pai, nome_mae, telefone_responsavel, email_responsavel
-        ))
-
-        conn.commit()
-        cur.close()
-        conn.close()
-
-        # Gerar token JWT
-        token = create_access_token(identity=login_id)
-        return {"mensagem": "Cadastro realizado com sucesso!", "token": token}, 201
 
 class Login(Resource):
     def post(self):
-        data = request.json
+        data = request.get_json(force=True)
         email = data.get("email")
         senha = data.get("senha")
+        if not email or not senha:
+            return {"erro": "Email e senha são obrigatórios"}, 400
 
         conn = get_conn()
         cur = conn.cursor()
-        cur.execute("SELECT login_id, senha_hash FROM login WHERE email=%s", (email,))
-        user = cur.fetchone()
-        cur.close()
-        conn.close()
+        try:
+            cur.execute("SELECT login_id, senha_hash, ativo FROM login WHERE email = %s", (email,))
+            row = cur.fetchone()
+            if not row:
+                return {"erro": "Usuário não existe"}, 404
 
-        if not user:
-            return {"erro": "Usuário não existe"}, 404
+            login_id, senha_hash, ativo = row
+            if not ativo:
+                return {"erro": "Conta desativada"}, 403
 
-        login_id, senha_hash = user
-        if not verificar_senha(senha, senha_hash):
-            return {"erro": "Senha incorreta"}, 401
+            if not verificar_senha(senha, senha_hash):
+                return {"erro": "Senha incorreta"}, 401
 
-        token = create_access_token(identity=login_id)
-        return {"token": token}, 200
+            token = create_access_token(identity=str(login_id))
+            return {"token": token, "login_id": login_id}, 200
 
-# ===== CRIAR ATIVIDADE =====
-class CriarAtividade(Resource):
+        finally:
+            cur.close()
+            conn.close()
+
+class Perfil(Resource):
     @jwt_required()
-    def post(self):
-        data = request.json
-
-        conn = get_conn()
-        cur = conn.cursor()
-
-        cur.execute("""
-            INSERT INTO atividades (
-                titulo, descricao, categoria, dificuldade, tempo_estimado_min, recursos
-            )
-            VALUES (%s, %s, %s, %s, %s, %s)
-            RETURNING atividade_id
-        """, (
-            data["titulo"],
-            data.get("descricao"),
-            data.get("categoria"),
-            data.get("dificuldade"),
-            data.get("tempo_estimado_min"),
-            json.dumps(data.get("recursos")) if data.get("recursos") else None
-        ))
-
-        atividade_id = cur.fetchone()[0]
-
-        conn.commit()
-        cur.close()
-        conn.close()
-
-        return {"atividade_id": atividade_id}, 201
-
-# ===== LISTAR ATIVIDADES =====
-class ListarAtividades(Resource):
     def get(self):
+        # login_id do JWT
+        login_id = int(get_jwt_identity())  # garante que seja inteiro
         conn = get_conn()
         cur = conn.cursor()
-        cur.execute("""
-            SELECT atividade_id, titulo, descricao, categoria, dificuldade,
-                   tempo_estimado_min, recursos
-            FROM atividades
-            WHERE ativo=true
-        """)
-        rows = cur.fetchall()
-        cur.close()
-        conn.close()
+        try:
+            cur.execute("""
+                SELECT c.nome AS nome_crianca, c.data_nascimento, c.nivel_autismo,
+                       c.nome_pai, c.nome_mae, c.telefone_responsavel, c.email_responsavel,
+                       l.email AS email_login
+                FROM crianca c
+                INNER JOIN login l ON c.login_id = l.login_id
+                WHERE c.login_id = %s
+            """, (login_id,))
+            row = cur.fetchone()
+            if not row:
+                return {"erro": "Usuário não encontrado"}, 404
 
-        atividades = []
-        for r in rows:
-            atividades.append({
-                "atividade_id": r[0],
-                "titulo": r[1],
-                "descricao": r[2],
-                "categoria": r[3],
-                "dificuldade": r[4],
-                "tempo_estimado_min": r[5],
-                "recursos": json.loads(r[6]) if r[6] else None
-            })
+            cols = ["nome_crianca","data_nascimento","nivel_autismo",
+                    "nome_pai","nome_mae","telefone_responsavel","email_responsavel","email_login"]
+            perfil = dict_from_row(row, cols)
 
-        return {"atividades": atividades}, 200
+            # transforma date em string
+            if perfil.get("data_nascimento"):
+                perfil["data_nascimento"] = perfil["data_nascimento"].isoformat()
 
-# ============================
-# ADICIONAR RECURSOS AO API
-# ============================
+            return perfil, 200
+        finally:
+            cur.close()
+            conn.close()
 
+class AtualizarPerfil(Resource):
+    @jwt_required()
+    def put(self):
+        login_id = int(get_jwt_identity())
+        data = request.get_json(force=True)
+
+        nome = data.get("nome")
+        data_nascimento = data.get("data_nascimento")
+        nivel_autismo = data.get("nivel_autismo")
+        nome_pai = data.get("nome_pai")
+        nome_mae = data.get("nome_mae")
+        telefone_responsavel = data.get("telefone_responsavel")
+        email_responsavel = data.get("email_responsavel")
+
+        # Validação simples
+        obrigatorios = [nome, data_nascimento, nivel_autismo, nome_pai, nome_mae, telefone_responsavel, email_responsavel]
+        if not all(obrigatorios):
+            return {"erro": "Todos os campos obrigatórios devem ser preenchidos"}, 400
+
+        conn = get_conn()
+        cur = conn.cursor()
+
+        try:
+            cur.execute("""
+                UPDATE crianca
+                SET nome = %s,
+                    data_nascimento = %s,
+                    nivel_autismo = %s,
+                    nome_pai = %s,
+                    nome_mae = %s,
+                    telefone_responsavel = %s,
+                    email_responsavel = %s
+                WHERE login_id = %s
+            """, (
+                nome,
+                data_nascimento,
+                int(nivel_autismo),
+                nome_pai,
+                nome_mae,
+                telefone_responsavel,
+                email_responsavel,
+                login_id
+            ))
+
+            if cur.rowcount == 0:
+                return {"erro": "Usuário não encontrado"}, 404
+
+            conn.commit()
+            return {"mensagem": "Perfil atualizado com sucesso!"}, 200
+
+        except Exception as e:
+            conn.rollback()
+            return {"erro": "Erro ao atualizar perfil", "detalhes": str(e)}, 500
+
+        finally:
+            cur.close()
+            conn.close()
+
+
+
+# -----------------------
+# REGISTRAR ROTAS
+# -----------------------
 api.add_resource(Home, "/")
 api.add_resource(Registrar, "/registrar")
 api.add_resource(Login, "/login")
-api.add_resource(CriarAtividade, "/atividades")
-api.add_resource(ListarAtividades, "/atividades/listar")
+api.add_resource(Perfil, "/perfil")
+api.add_resource(AtualizarPerfil, "/perfil/atualizar")
 
-# ============================
-# EXECUÇÃO
-# ============================
-
+# -----------------------
+# RUN
+# -----------------------
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)

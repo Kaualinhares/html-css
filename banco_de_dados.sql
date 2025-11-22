@@ -1,9 +1,10 @@
+
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 -------------------------------------------------------
 -- LOGIN
--- Apenas TERAPEUTAS fazem login
+-- Agora utilizado pelas crianças
 -------------------------------------------------------
 CREATE TABLE login (
   login_id SERIAL PRIMARY KEY,
@@ -14,26 +15,12 @@ CREATE TABLE login (
 );
 
 -------------------------------------------------------
--- TERAPEUTA
--- Agora possui nome direto + login
--------------------------------------------------------
-CREATE TABLE terapeuta (
-  terapeuta_id SERIAL PRIMARY KEY,
-  login_id INT UNIQUE REFERENCES login(login_id) ON DELETE CASCADE,
-  nome VARCHAR(200) NOT NULL,
-  telefone VARCHAR(20),
-  especialidade VARCHAR(120),
-  criado_em TIMESTAMP WITH TIME ZONE DEFAULT now()
-);
-
--------------------------------------------------------
 -- CRIANÇA
--- Contém nome + dados e terapeuta responsável
 -------------------------------------------------------
 CREATE TABLE crianca (
   crianca_id SERIAL PRIMARY KEY,
-  terapeuta_id INT REFERENCES terapeuta(terapeuta_id) ON DELETE SET NULL,
-  
+  login_id INT UNIQUE REFERENCES login(login_id) ON DELETE CASCADE,
+
   nome VARCHAR(200) NOT NULL,
   data_nascimento DATE,
   nivel_autismo SMALLINT,
@@ -59,7 +46,6 @@ CREATE TABLE atividades (
   dificuldade SMALLINT,
   tempo_estimado_min INT,
   recursos JSONB,
-  criado_por INT REFERENCES terapeuta(terapeuta_id),
   ativo BOOLEAN DEFAULT true,
   criado_em TIMESTAMP WITH TIME ZONE DEFAULT now()
 );
@@ -76,8 +62,7 @@ CREATE TABLE sessoes (
   score NUMERIC,
   acuracia NUMERIC,
   tempo_gasto_segundos INT,
-  tentativas INT DEFAULT 1,
-  iniciado_por INT REFERENCES terapeuta(terapeuta_id)
+  tentativas INT DEFAULT 1
 );
 
 -------------------------------------------------------

@@ -4,28 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MundoTEA - Criar & Colorir</title>
-    <link rel="icon" type="image/png" href="imagens/logo_mundotea.png">
     <link rel="stylesheet" href="css/estilo.css">
 </head>
 <body>
-
-    <!-- ======= CABEÇALHO PADRÃO ======= -->
     <header class="header">
         <div class="logo">
             <img src="imagens/logo_mundotea.png" alt="Logo MundoTEA">
-            <h1 class="titulo-site">
-                <span class="mundo">Mundo</span><span class="tea">TEA</span>
-            </h1>
-        </div>
-
-        <div class="user-actions">
-            <a href="perfil.html" class="profile-icon">
-                <img src="imagens/iconegenerico.png" alt="Perfil Usuário">
-            </a>
+            <h1 class="titulo-site"><span class="mundo">Mundo</span><span class="tea">TEA</span></h1>
         </div>
     </header>
-
-    <!-- ======= CONTEÚDO PRINCIPAL ======= -->
     <main class="colorir-container">
 
         <section class="colorir-titulo-area">
@@ -38,31 +25,29 @@
             <aside class="colorir-desenhos-lista">
 
                 <div class="colorir-desenho-item">
-                    <img src="imagens/foguete-colorir.jpg" alt="" data-img="imagens/foguete-colorir.jpg">
+                    <img src="imagens/foguete-colorir.jpg" data-img="imagens/foguete-colorir.jpg">
                     <button class="colorir-btn-escolher">Escolher</button>
                 </div>
 
                 <div class="colorir-desenho-item">
-                    <img src="imagens/castelo-colorir.jpg" alt="" data-img="imagens/castelo-colorir.jpg">
+                    <img src="imagens/castelo-colorir.jpg" data-img="imagens/castelo-colorir.jpg">
                     <button class="colorir-btn-escolher">Escolher</button>
                 </div>
 
                 <div class="colorir-desenho-item">
-                    <img src="imagens/monstro-colorir.jpg" alt="" data-img="imagens/monstro-colorir.jpg">
+                    <img src="imagens/monstro-colorir.jpg" data-img="imagens/monstro-colorir.jpg">
                     <button class="colorir-btn-escolher">Escolher</button>
                 </div>
 
                 <div class="colorir-desenho-item">
-                    <img src="imagens/reino-colorir.jpg" alt="" data-img="imagens/reino-colorir.jpg">
+                    <img src="imagens/reino-colorir.jpg" data-img="imagens/reino-colorir.jpg">
                     <button class="colorir-btn-escolher">Escolher</button>
                 </div>
 
             </aside>
 
-            <!-- ÁREA CENTRAL DO DESENHO -->
+            <!-- CANVAS -->
             <section class="colorir-area-desenho">
-
-                <!-- TROQUEI IMG POR CANVAS -->
                 <canvas id="canvas-desenho" width="500" height="500"></canvas>
 
                 <div class="voltar-container">
@@ -74,111 +59,144 @@
             <aside class="colorir-ferramentas">
 
                 <div class="colorir-icones">
-                    <div id="btnPincel"><img src="imagens/pincel.png" alt=""> Pincel</div>
-                    <div><img src="imagens/lapis.png" alt=""> Lápis</div>
-                    <div><img src="imagens/preencher.png" alt=""> Preencher</div>
-                    <div><img src="imagens/gota.png" alt=""> Tinta</div>
-                    <div id="btnBorracha"><img src="imagens/borracha.png" alt=""> Borracha</div>
-                    <div id="btnLimpar"><img src="imagens/lixeira.png" alt=""> Apagar</div>
+                    <button id="btnPincel" class="colorir-btn-escolher">🖌️ Pincel</button>
+                    <button id="btnLapis" class="colorir-btn-escolher"">✏️ Lápis</button>
                 </div>
 
+                <!-- PALETA: 5 COLUNAS x 3 LINHAS = 15 CORES -->
                 <div class="colorir-paleta">
                     <span class="cor" data-cor="#ff0000" style="background:#ff0000"></span>
-                    <span class="cor" data-cor="#ff8000" style="background:#ff8000"></span>
+                    <span class="cor" data-cor="#ff6600" style="background:#ff6600"></span>
                     <span class="cor" data-cor="#ffff00" style="background:#ffff00"></span>
                     <span class="cor" data-cor="#00cc00" style="background:#00cc00"></span>
                     <span class="cor" data-cor="#0066ff" style="background:#0066ff"></span>
-                    <span class="cor" data-cor="#8000ff" style="background:#8000ff"></span>
-                    <span class="cor" data-cor="#ff00ff" style="background:#ff00ff"></span>
+
+                    <span class="cor" data-cor="#ff66b2" style="background:#ff66b2"></span>
+                    <span class="cor" data-cor="#cc33ff" style="background:#cc33ff"></span>
+                    <span class="cor" data-cor="#00ffff" style="background:#00ffff"></span>
+                    <span class="cor" data-cor="#ffaa00" style="background:#ffaa00"></span>
                     <span class="cor" data-cor="#000000" style="background:#000000"></span>
+
                     <span class="cor" data-cor="#ffffff" style="background:#ffffff; border:1px solid #ccc"></span>
+                    <span class="cor" data-cor="#888888" style="background:#888888"></span>
+                    <span class="cor" data-cor="#663300" style="background:#663300"></span>
+                    <span class="cor" data-cor="#ff9999" style="background:#ff9999"></span>
+                    <span class="cor" data-cor="#9999ff" style="background:#9999ff"></span>
                 </div>
 
-                <button class="colorir-btn-acao azul">Desfazer</button>
-                <button class="colorir-btn-acao verde">Salvar</button>
+                <button id="btnDesfazer" class="colorir-btn-acao azul">↩️ Desfazer</button>
+                <button id="btnSalvar" class="colorir-btn-acao verde">Salvar imagem</button>
 
             </aside>
 
         </div>
     </main>
 
-    <!-- ========= JAVASCRIPT ========= -->
     <script>
         const canvas = document.getElementById("canvas-desenho");
         const ctx = canvas.getContext("2d");
 
         let desenhando = false;
         let corAtual = "#000000";
-        let modo = "pincel"; // ou "borracha"
+        let modo = "pincel";
         let imagemAtual = new Image();
+        let historico = [];
 
-        // =============== CARREGAR IMAGEM NO CANVAS ===============
+        /* ======== FUNÇÃO: SALVAR ESTADO PARA DESFAZER ======== */
+        function salvarEstado() {
+            historico.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
+            if (historico.length > 30) historico.shift(); // evita memória excessiva
+        }
+
+        /* ======== CARREGAR DESENHO NO CANVAS ======== */
         function carregarDesenho(src) {
             imagemAtual.src = src;
             imagemAtual.onload = () => {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 ctx.drawImage(imagemAtual, 0, 0, canvas.width, canvas.height);
+
+                historico = [];      // limpando histórico sempre que troca o desenho
+                salvarEstado();      // salva o estado inicial da imagem
             };
         }
 
-        // Carrega o monstro ao abrir
-        window.onload = () => {
-            carregarDesenho("imagens/monstro-colorir.jpg");
-        };
+        /* Carrega o primeiro desenho ao abrir */
+        window.onload = () => carregarDesenho("imagens/monstro-colorir.jpg");
 
-        // =============== TROCAR DESENHO AO CLICAR EM ESCOLHER ===============
+        /* ======== ESCOLHER DESENHO ======== */
         document.querySelectorAll(".colorir-btn-escolher").forEach(btn => {
-            btn.addEventListener("click", () => {
-                const nova = btn.parentElement.querySelector("img").dataset.img;
-                carregarDesenho(nova);
-            });
+            btn.onclick = () => {
+                const img = btn.parentElement.querySelector("img").dataset.img;
+                carregarDesenho(img);
+            };
         });
 
-        // =============== PALETA ===============
+        /* ======== PALETA DE CORES ======== */
         document.querySelectorAll(".cor").forEach(c => {
-            c.addEventListener("click", () => {
+            c.onclick = () => {
                 corAtual = c.dataset.cor;
                 modo = "pincel";
-            });
+            };
         });
 
-        // =============== PINCEL ===============
-        canvas.addEventListener("mousedown", () => desenhando = true);
-        canvas.addEventListener("mouseup", () => { desenhando = false; ctx.beginPath(); });
-        canvas.addEventListener("mouseleave", () => { desenhando = false; ctx.beginPath(); });
+        /* ======== FERRAMENTAS ======== */
+        document.getElementById("btnPincel").onclick = () => modo = "pincel";
+        document.getElementById("btnLapis").onclick = () => modo = "lapis";
 
-        canvas.addEventListener("mousemove", (e) => {
+        /* ======== EVENTOS DO MOUSE ======== */
+        canvas.onmousedown = () => {
+            salvarEstado();     // salva para permitir desfazer
+            desenhando = true;
+        };
+
+        canvas.onmouseup = () => {
+            desenhando = false;
+            ctx.beginPath();
+        };
+
+        canvas.onmouseleave = () => {
+            desenhando = false;
+            ctx.beginPath();
+        };
+
+        /* ======== DESENHAR NO CANVAS ======== */
+        canvas.onmousemove = (e) => {
             if (!desenhando) return;
 
-            const bounds = canvas.getBoundingClientRect();
-            const x = e.clientX - bounds.left;
-            const y = e.clientY - bounds.top;
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
 
-            ctx.lineWidth = 10;
             ctx.lineCap = "round";
+            ctx.strokeStyle = corAtual;
+            ctx.globalCompositeOperation = "source-over";
 
-            ctx.strokeStyle = modo === "borracha" ? "white" : corAtual;
+            if (modo === "pincel") ctx.lineWidth = 12;  // mais grosso
+            if (modo === "lapis") ctx.lineWidth = 5;    // mais fino
 
             ctx.lineTo(x, y);
             ctx.stroke();
+
             ctx.beginPath();
             ctx.moveTo(x, y);
-        });
+        };
 
-        // =============== BORRACHA ===============
-        document.getElementById("btnBorracha").addEventListener("click", () => {
-            modo = "borracha";
-        });
+        /* ======== DESFAZER ======== */
+        document.getElementById("btnDesfazer").onclick = () => {
+            if (historico.length > 1) {
+                historico.pop(); // descarta o estado atual
+                const estadoAnterior = historico[historico.length - 1];
+                ctx.putImageData(estadoAnterior, 0, 0);
+            }
+        };
 
-        // =============== LIMPAR TUDO ===============
-        document.getElementById("btnLimpar").addEventListener("click", () => {
-            carregarDesenho(imagemAtual.src); // recarrega o desenho sem pintura
-        });
-
-        // =============== PINCEL NORMAL ===============
-        document.getElementById("btnPincel").addEventListener("click", () => {
-            modo = "pincel";
-        });
+        /* ======== SALVAR IMAGEM ======== */
+        document.getElementById("btnSalvar").onclick = () => {
+            const link = document.createElement("a");
+            link.download = "meu-desenho.png";
+            link.href = canvas.toDataURL();
+            link.click();
+        };
     </script>
 
 </body>
