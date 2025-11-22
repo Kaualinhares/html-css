@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="imagens/logo_mundotea.png">
+  <title>MundoTEA - Jogo da Memória</title>
+  <link rel="stylesheet" href="css/estilo.css">
+</head>
+
+<body>
+
+  <!-- Cabeçalho igual -->
+  <header class="header">
+    <div class="logo">
+      <img src="imagens/logo_mundotea.png" alt="Logo MundoTEA">
+      <h1 class="titulo-site"><span class="mundo">Mundo</span><span class="tea">TEA</span></h1>
+    </div>
+    <div class="user-actions">
+      <a href="perfil.html" class="profile-icon">
+        <img src="imagens/iconegenerico.png" alt="Perfil Usuário">
+      </a>
+    </div>
+  </header>
+
+  <!-- CONTAINER PRINCIPAL DO JOGO -->
+  <main class="memoria-container">
+
+    <header class="memoria-header">
+      <img src="imagens/memoriapng.png" alt="Ícone Memória" class="memoria-icone">
+      <h1>Jogo da Memória</h1>
+    </header>
+
+    <div class="memoria-timer">Tempo: <span id="timer">00:00</span></div>
+    <div class="memoria-controls">
+      <button id="btnReiniciar" class="btn-jogar">Reiniciar Jogo</button>
+    </div>
+
+    <section class="memoria-grid" id="memoriaGrid">
+
+      <!-- CARTAS -->
+      <div class="memoria-card" data-animal="leao">
+        <div class="memoria-card-inner">
+          <div class="memoria-front"></div>
+          <div class="memoria-back">
+            <img src="imagens/leao.jpg" alt="Leão">
+            <span class="memoria-nome">Leão</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="memoria-card" data-animal="flamingo">
+        <div class="memoria-card-inner">
+          <div class="memoria-front"></div>
+          <div class="memoria-back">
+            <img src="imagens/flamingo.jpg" alt="Flamingo">
+            <span class="memoria-nome">Flamingo</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="memoria-card" data-animal="tartaruga">
+        <div class="memoria-card-inner">
+          <div class="memoria-front"></div>
+          <div class="memoria-back">
+            <img src="imagens/tartaruga.jpg" alt="Tartaruga">
+            <span class="memoria-nome">Tartaruga</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="memoria-card" data-animal="girafa">
+        <div class="memoria-card-inner">
+          <div class="memoria-front"></div>
+          <div class="memoria-back">
+            <img src="imagens/girafa.jpg" alt="Girafa">
+            <span class="memoria-nome">Girafa</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="memoria-card" data-animal="elefante">
+        <div class="memoria-card-inner">
+          <div class="memoria-front"></div>
+          <div class="memoria-back">
+            <img src="imagens/elefante.jpg" alt="Elefante">
+            <span class="memoria-nome">Elefante</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="memoria-card" data-animal="macaco">
+        <div class="memoria-card-inner">
+          <div class="memoria-front"></div>
+          <div class="memoria-back">
+            <img src="imagens/macaco.jpg" alt="Macaco">
+            <span class="memoria-nome">Macaco</span>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <div class="voltar-container">
+      <a href="jogos-ludicos.html" class="btn-voltar">Voltar ao menu</a>
+    </div>
+
+  </main>
+
+  <!-- ===== SCRIPT ===== -->
+  <script>
+    let grid = document.getElementById("memoriaGrid");
+    let cards = [...grid.children];
+    let primeira = null;
+    let segunda = null;
+    let travar = false;
+
+    let tempo = 0;
+    let intervalo = null;
+    let cronometroIniciado = false;
+
+    // DUPLICAR CARTAS
+    cards.forEach(card => {
+      let clone = card.cloneNode(true);
+      grid.appendChild(clone);
+    });
+
+    cards = [...grid.children];
+
+    function embaralhar() {
+      cards.sort(() => Math.random() - 0.5).forEach(c => grid.appendChild(c));
+    }
+
+    function reiniciarJogo() {
+      clearInterval(intervalo);
+      cronometroIniciado = false;
+      tempo = 0;
+      document.getElementById("timer").textContent = "00:00";
+
+      cards.forEach(card => {
+        card.classList.remove("virada", "matched");
+      });
+
+      embaralhar();
+      primeira = null;
+      segunda = null;
+      travar = false;
+    }
+
+    // Embaralhar inicial
+    embaralhar();
+
+    // Eventos cartas
+    cards.forEach(card => {
+      card.addEventListener("click", () => virar(card));
+    });
+
+    // Evento botão reiniciar
+    document.getElementById("btnReiniciar").addEventListener("click", reiniciarJogo);
+
+    function iniciarCronometro() {
+      intervalo = setInterval(() => {
+        tempo++;
+        let m = String(Math.floor(tempo / 60)).padStart(2, "0");
+        let s = String(tempo % 60).padStart(2, "0");
+        document.getElementById("timer").textContent = `${m}:${s}`;
+      }, 1000);
+    }
+
+function virar(card) {
+  if (!cronometroIniciado) {
+    cronometroIniciado = true;
+    iniciarCronometro();
+  }
+
+  if (travar || card.classList.contains("virada") || card.classList.contains("matched")) return;
+
+  card.classList.add("virada");
+
+  if (!primeira) {
+    primeira = card;
+  } else {
+    segunda = card;
+    travar = true;
+
+    let a1 = primeira.dataset.animal;
+    let a2 = segunda.dataset.animal;
+
+    if (a1 === a2) {
+      setTimeout(() => {
+        primeira.classList.add("matched");
+        segunda.classList.add("matched");
+        primeira = null;
+        segunda = null;
+        travar = false;
+
+        // Verificar se todas as cartas foram acertadas
+        if (cards.every(c => c.classList.contains("matched"))) {
+          clearInterval(intervalo);
+        }
+
+      }, 600);
+    } else {
+      setTimeout(() => {
+        primeira.classList.remove("virada");
+        segunda.classList.remove("virada");
+        primeira = null;
+        segunda = null;
+        travar = false;
+      }, 900);
+    }
+  }
+}
+
+  </script>
+
+</body>
+</html>

@@ -1361,3 +1361,167 @@ body {
         width: 100%;
     }
 }
+
+/* ======= PALETA =======
+Azul escuro: #5B8FB9
+Azul claro:  #A7C7E7
+Branco gelo: #F8F9FA
+Cinza claro: #E9ECEF
+Verde claro: #CDE8D5
+========================= */
+
+/* CONTAINER PRINCIPAL */
+.memoria-container {
+  background-color: #ffffff;
+  border-radius: 20px;
+  padding: 40px;
+  width: 95%;
+  max-width: 1100px;
+  margin: 40px auto;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+/* HEADER DO JOGO */
+.memoria-header {
+  background-color: #A7C7E7;
+  border-radius: 18px;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  align-items: center;
+}
+
+.memoria-header h1 {
+  margin: 0;
+  color: #2b3d3b;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.memoria-icone {
+  width: 55px;
+}
+
+/* CRONOMETRO */
+.memoria-timer {
+  margin: 20px 0;
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #5B8FB9;
+}
+
+/* BOTÃO REINICIAR */
+.memoria-controls {
+  margin-bottom: 20px;
+}
+
+#btnReiniciar {
+  background-color: #5B8FB9;
+  color: white;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 1rem;
+}
+
+#btnReiniciar:hover {
+  background-color: #4a7ca3;
+  transform: scale(1.05);
+}
+
+/* GRID */
+.memoria-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 25px;
+  margin-top: 30px;
+}
+
+/* CARTA */
+.memoria-card {
+  width: 140px;
+  height: 170px;
+  perspective: 900px;
+  cursor: pointer;
+}
+
+.memoria-card.matched {
+  cursor: default;
+  opacity: 0.55;
+  filter: grayscale(100%);
+}
+
+.memoria-card-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform .6s;
+}
+
+.memoria-card.virada .memoria-card-inner {
+  transform: rotateY(180deg);
+}
+
+/* FRENTE E VERSO */
+.memoria-front,
+.memoria-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  backface-visibility: hidden;
+}
+
+.memoria-front {
+  background-color: #5B8FB9;
+  border: 4px solid #A7C7E7;
+}
+
+.memoria-back {
+  background-color: #ffffff;
+  border: 4px solid #5B8FB9;
+  transform: rotateY(180deg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.memoria-back img {
+  width: 75px;
+  height: 75px;
+  object-fit: contain;
+  margin-bottom: 8px;
+}
+
+.memoria-nome {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #5B8FB9;
+}
+
+/* BOTÃO VOLTAR */
+.btn-voltar {
+  background-color: #CDE8D5;
+  color: #2b3d3b;
+  text-decoration: none;
+  padding: 12px 28px;
+  border-radius: 14px;
+  font-weight: 600;
+  font-size: 1rem;
+  display: inline-block;
+  margin-top: 40px;
+  transition: 0.3s;
+}
+
+.btn-voltar:hover {
+  background-color: #98c79f;
+  transform: scale(1.05);
+}
+

@@ -33,7 +33,7 @@
         <img src="imagens/memoria.png" alt="Jogo Memória" class="jogo-icone">
         <h2>Memória</h2>
         <p>Desenvolve coordenação motora e atenção.</p>
-        <button class="btn-jogar">Jogar agora</button>
+        <button class="btn-jogar btn-memoria">Jogar agora</button>
       </div>
 
       <div class="jogo-card">
@@ -50,14 +50,19 @@
         <br>
         <button class="btn-jogar">Jogar agora</button>
       </div>
-
-
     </section>
 
     <div class="voltar-container">
       <a href="index.html" class="btn-voltar">Voltar ao Menu</a>
     </div>
   </main>
+
+  <!-- ===== SCRIPT PARA REDIRECIONAR ===== -->
+  <script>
+    document.querySelector(".btn-memoria").addEventListener("click", function() {
+      window.location.href = "jogo-da-memoria.html";
+    });
+  </script>
 
 </body>
 </html>
