@@ -21,11 +21,11 @@
 
   <div class="user-actions">
 
-    <!-- Mostrado apenas sem login -->
+    <!-- Mostrado sem login -->
     <a id="btnLogin" href="login.html" class="btn-link">Login</a>
     <a id="btnCadastro" href="cadastro.html" class="btn-link">Cadastrar-se</a>
 
-    <!-- Ícone do usuário -->
+    <!-- Ícone do usuário (sempre visível) -->
     <a id="perfilLink" href="#" class="profile-icon">
         <img id="iconePerfil" src="imagens/iconegenerico.png" alt="Perfil Usuário">
     </a>
@@ -82,38 +82,33 @@
 // Controle de Login
 // ==========================
 
-// Função para verificar login
+// Verifica se está logado e atualiza o header
 function verificarLogin() {
     const token = localStorage.getItem('token');
+
     const btnLogin = document.getElementById('btnLogin');
     const btnCadastro = document.getElementById('btnCadastro');
     const perfilLink = document.getElementById('perfilLink');
-    const botoesMenu = document.querySelectorAll('.grid-menu .btn');
 
     if(token) {
         // Usuário logado
         btnLogin.style.display = 'none';
         btnCadastro.style.display = 'none';
-        perfilLink.style.display = 'block';
-
-        // Menu desbloqueado
-        botoesMenu.forEach(btn => btn.disabled = false);
+        perfilLink.style.display = 'inline-block';
 
     } else {
         // Usuário não logado
         btnLogin.style.display = 'inline-block';
         btnCadastro.style.display = 'inline-block';
-        perfilLink.style.display = 'inline-block';
-
-        // Menu bloqueado
-        botoesMenu.forEach(btn => btn.disabled = true);
+        perfilLink.style.display = 'inline-block'; // ícone continua visível
     }
 }
 
-// Redirecionamento do ícone de perfil
+// Clique no ícone do usuário → perfil ou login
 document.getElementById('perfilLink').addEventListener('click', function(e){
     e.preventDefault();
     const token = localStorage.getItem('token');
+
     if(token){
         window.location.href = 'perfil.html';
     } else {
@@ -121,18 +116,18 @@ document.getElementById('perfilLink').addEventListener('click', function(e){
     }
 });
 
-// Função para abrir páginas do menu
+// Botões do menu (mesmo comportamento)
 function abrir(url) {
     const token = localStorage.getItem('token');
+
     if(token){
         window.location.href = url;
     } else {
-        alert('Você precisa estar logado para acessar esta página.');
         window.location.href = 'login.html';
     }
 }
 
-// Chamar no carregamento da página
+// Executa ao carregar a página
 window.onload = verificarLogin;
 </script>
 
